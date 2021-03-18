@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "29597608461",
+    "project_id": "hellotori-1f0fe",
+    "storage_bucket": "hellotori-1f0fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29597608461:android:6068d3cc7d7bb5a26cc344",
+        "android_client_info": {
+          "package_name": "com.example.hellotori"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29597608461-j4dar4ulq1m2igvsvobk51vqufe5h2gf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hellotori",
+            "certificate_hash": "b498206ef76c0b13d56e69b2da083dad13bf32f2"
+          }
+        },
+        {
+          "client_id": "29597608461-memmh5m0cnbvs4pjjrhq6jtig2v32pf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1m-jvo1ZQ94cuQjVnbO_7y7eYgdYSZD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29597608461-memmh5m0cnbvs4pjjrhq6jtig2v32pf1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
