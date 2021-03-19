@@ -6,16 +6,6 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-
-  final authModelProvider = ChangeNotifierProvider<AuthenticationViewModel>(
-    (ref) => AuthenticationViewModel(auth: ref.watch(firebaseAuthProvider)),
-  );
-
-  final eventStreamProvider = StreamProvider.autoDispose<List<Event>>((ref) {
-    final database = ref.watch(databaseProvider);
-    return database.eventList;
-  });
-
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -68,7 +58,7 @@ class _EventPageState extends State<EventPage> {
                       itemBuilder: (context, index){
                         return GestureDetector(
                           onTap: (){
-                            Get.to(() => DetailedEventPage(index: index, event: event[index]), transition: Transition.fadeIn);
+                            Get.to(() => DetailedEventPage(index: index), transition: Transition.fadeIn);
                           },
                           child: Hero(
                             tag: "hero" + index.toString(),

@@ -1,15 +1,16 @@
 part of "configs.dart";
 
 class Font{
-  static Text out({title, int? fontSize, fontWeight, color, textAlign, family}){
+  static Text out({title, int fontSize = 16, fontWeight, color, textAlign, family, bool overrideMaxline = false}){
     return Text(
       title ?? "",
+      maxLines: overrideMaxline ? 100 : 3,
       textAlign: textAlign ?? TextAlign.center,
       style: TextStyle(
         fontFamily: family ?? "EinaRegular",
         color: color ?? Colors.black,
         fontWeight: fontWeight ?? FontWeight.normal,
-        fontSize: fontSize!.toDouble())
+        fontSize: fontSize.toDouble())
     );
   }
 }

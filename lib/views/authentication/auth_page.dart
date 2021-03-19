@@ -71,8 +71,10 @@ class AuthPage extends ConsumerWidget {
                       ),
                       SizedBox(height: MQuery.height(0.06, context)),
                       Container(
-                        height: MQuery.height(0.1, context),
-                        width: MQuery.width(0.5, context),
+                        height: MQuery.height(0.08, context),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MQuery.width(0.05, context)
+                        ),
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(

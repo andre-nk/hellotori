@@ -1,19 +1,14 @@
 part of "../pages.dart";
-
-class DetailedEventPage extends StatefulWidget {
+class DetailedEventPage extends ConsumerWidget {
 
   final int? index;
-  final Event? event;
-
-  DetailedEventPage({@required this.index, @required this.event});
+  DetailedEventPage({this.index});
 
   @override
-  _DetailedEventPageState createState() => _DetailedEventPageState();
-}
+  Widget build(BuildContext context, ScopedReader watch) {
 
-class _DetailedEventPageState extends State<DetailedEventPage> {
-  @override
-  Widget build(BuildContext context) {
+    final eventListProvider = watch(eventStreamProvider);
+
     return HeaderPage(
       isDetailedPage: true,
       colorStart: HexColor("48A2D6"),
@@ -42,24 +37,18 @@ class _DetailedEventPageState extends State<DetailedEventPage> {
             horizontal: MQuery.height(0.025, context),
             vertical: MQuery.height(0.02, context)
           ),
-          child: widget.event == null
-          ? Center(
-              child: SpinKitCubeGrid(
-                color: Palette.blueAccent,
-                size: 50.0,
-              ),
-            )
-          : ListView(
+          child: eventListProvider.data!.when(
+            data: (event) => ListView(
               physics: BouncingScrollPhysics(),
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Hero(
-                      tag: "hero" + widget.index.toString(),
+                      tag: "hero" + index.toString(),
                       child: EventCard(
-                        index: widget.index ?? 0,
-                        event: widget.event!,
+                        index: index ?? 0,
+                        event: event[index!],
                       ),
                     ),
                     SizedBox(height: MQuery.height(0.03, context)),
@@ -75,13 +64,14 @@ class _DetailedEventPageState extends State<DetailedEventPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Font.out(
+                              overrideMaxline: true,
                               textAlign: TextAlign.start,
-                              title: widget.event!.description,
+                              title: event[index!].description,
                               fontSize: 18,
                               family: "EinaRegular"
                             ),
                             SizedBox(height: MQuery.height(0.03, context)),
-                            widget.event!.type == "Live" 
+                            event[index!].type == "Live" 
                             ? Container(
                               height: MQuery.height(0.1, context),
                               width: MQuery.width(0.5, context),
@@ -98,7 +88,7 @@ class _DetailedEventPageState extends State<DetailedEventPage> {
                                   color: Colors.white,
                                   method: (){
                                     Get.to(() => LiveEventPage(
-                                      id: widget.event!.videoLink,
+                                      index: index,
                                     ), transition: Transition.fadeIn);
                                   },
                                   title: Row(
@@ -123,7 +113,10 @@ class _DetailedEventPageState extends State<DetailedEventPage> {
                   ],
                 )
               ],
-            )             
+            ),    
+            error: (_,__) => Text("a"),
+            loading: (){}
+          )   
         )
       )
     );

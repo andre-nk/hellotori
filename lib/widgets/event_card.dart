@@ -9,6 +9,17 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    DateTime schedule = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      DateFormat("hh:mm").parse(event.schedule).hour,
+      DateFormat("hh:mm").parse(event.schedule).minute
+    );
+
+  // print(schedule.toString() + " " + DateTime.now().toString());
+
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(                      
@@ -39,7 +50,7 @@ class EventCard extends StatelessWidget {
             )
           ),    
           Positioned(
-            top: MQuery.height(0.23, context),
+            top: MQuery.height(0.24, context),
             right: 0,
             left: 0,
             bottom: 0,
@@ -50,8 +61,11 @@ class EventCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Font.out(                              
-                    title: event.title,
+                  Font.out( 
+                    textAlign: TextAlign.start,                            
+                    title: event.title.length > 20
+                      ? event.title.substring(0,16) + "..."
+                      : event.title,
                     fontSize: 24,
                     color: Palette.white,
                     family: "EinaSemiBold"                                   
@@ -80,16 +94,16 @@ class EventCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Font.out(
-                    title: "NOW SHOWING",
+                    title: DateTime.now().isBefore(schedule) ? "UPCOMING EVENT" : "NOW SHOWING" ,
                     fontSize: 18,
                     color: Palette.white,
                     family: "EinaSemiBold"
                   ),
-                  event.type == "Live"
-                  ? Image(
-                      image: AssetImage("assets/live_icon.png"),
-                    )
-                  : Icon(Icons.access_alarms_rounded, color: Palette.white,)
+                  event.type == "Live" //TODO: CHANGE TYPE TO LIVE WHEN STARTED AND TO "PASSED" IF FINISHED
+                  ? SizedBox()
+                  : event.type == "Passed"
+                    ? SizedBox()
+                    : Icon(Icons.access_alarms_rounded, color: Palette.white,)
                 ],
               ),
             ),

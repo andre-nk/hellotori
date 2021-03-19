@@ -1,5 +1,4 @@
 part of 'services.dart';
-
 class FirestoreDatabase{
   final _service = FirebaseFirestore.instance;
 
