@@ -21,7 +21,7 @@ class _EventPageState extends State<EventPage> {
     return Consumer(
       builder: (context, watch, _){
         final authModel = watch(authModelProvider);
-        final onboardingViewModel = context.read(onboardingViewModelProvider);
+        // final onboardingViewModel = context.read(onboardingViewModelProvider);
         final eventListProvider = watch(eventStreamProvider);
         return HeaderPage(
           isDetailedPage: false,
@@ -63,11 +63,12 @@ class _EventPageState extends State<EventPage> {
                   )
                 : eventListProvider.data!.when(
                     data: (event) => ListView.builder(
+                      physics: BouncingScrollPhysics(),
                       itemCount: event.length,
                       itemBuilder: (context, index){
                         return GestureDetector(
                           onTap: (){
-                            Get.to(() => DetailedEventPage(index: index, event: event[index]));
+                            Get.to(() => DetailedEventPage(index: index, event: event[index]), transition: Transition.fadeIn);
                           },
                           child: Hero(
                             tag: "hero" + index.toString(),

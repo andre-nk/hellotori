@@ -13,7 +13,7 @@ class FirestoreDatabase{
         videoLink: element["link"] ?? "",
         schedule: element["schedule"] ?? "",
         isChatEnabled: element["chatEnabled"] ?? true,
-        type: element["type"] ?? ""
+        type: element["type"] ?? "",
       ));
     });
     return eventList;

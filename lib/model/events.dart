@@ -1,24 +1,22 @@
 part of "model.dart";
 
 class Event{
-  String? uid;
-  String? title;
-  String? videoLink;
-  String? description;
-  List<String>? tags;
-  String? type;
-  String? schedule;
-  bool? isChatEnabled;
+  String uid;
+  String title;
+  String videoLink;
+  String description;
+  String type;
+  String schedule;
+  bool isChatEnabled;
 
-  Event({this.uid, this.title, this.videoLink, this.description, this.tags, this.type, this.schedule, this.isChatEnabled}){
-    this.uid = uid ?? ""; 
-    this.title = title ?? "";
-    this.videoLink = videoLink ?? "";
-    this.description = description ?? "";
-    this.tags = tags ?? [];
-    this.type = type ?? "";
-    this.schedule = schedule ?? "";
-    this.isChatEnabled = isChatEnabled ?? true;
+  Event({required this.uid,required this.title, required this.videoLink,required this.description, required this.type, required this.schedule, required this.isChatEnabled}){
+    this.uid = uid; 
+    this.title = title;
+    this.videoLink = videoLink;
+    this.description = description;
+    this.type = type;
+    this.schedule = schedule;
+    this.isChatEnabled = isChatEnabled;
   }
 }
 

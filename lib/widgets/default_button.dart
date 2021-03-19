@@ -2,10 +2,10 @@ part of "widgets.dart";
 
 class OnboardingButton extends StatelessWidget {
   final dynamic method;
-  final Widget? title;
-  final Color? color;
+  final Widget title;
+  final Color color;
 
-  const OnboardingButton({this.method, this.title, this.color});
+  const OnboardingButton({this.method, required this.title, required this.color});
 
   @override
   Widget build(BuildContext context) {

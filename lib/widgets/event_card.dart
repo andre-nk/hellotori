@@ -2,10 +2,10 @@ part of "widgets.dart";
 
 class EventCard extends StatelessWidget {
 
-  final int? index;
-  final Event? event;
+  final int index;
+  final Event event;
 
-  EventCard({@required this.index, @required this.event});
+  EventCard({required this.index, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +51,13 @@ class EventCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Font.out(                              
-                    title: event!.title ?? "",
+                    title: event.title,
                     fontSize: 24,
                     color: Palette.white,
                     family: "EinaSemiBold"                                   
                   ),
                   Font.out(
-                    title: "Pukul " + event!.schedule!,
+                    title: "Pukul " + event.schedule,
                     fontSize: 18,
                     color: Palette.white,
                     family: "EinaRegular"                                   
@@ -85,7 +85,7 @@ class EventCard extends StatelessWidget {
                     color: Palette.white,
                     family: "EinaSemiBold"
                   ),
-                  event!.type == "Live"
+                  event.type == "Live"
                   ? Image(
                       image: AssetImage("assets/live_icon.png"),
                     )

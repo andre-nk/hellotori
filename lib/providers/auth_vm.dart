@@ -11,8 +11,8 @@ class AuthenticationViewModel with ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
-      GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      GoogleSignInAuthentication? googleAuth = await googleUser!.authentication;
+      GoogleSignInAccount googleUser = (await googleSignIn.signIn())!;
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final credentials = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken
