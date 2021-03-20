@@ -14,5 +14,10 @@ class OnboardingViewModel extends StateNotifier<bool> {
     state = false;
   }
 
+  Future<void> setFirestoreLiveKey(String keyID) async{
+    await sharedPreferencesService.setFirestoreLiveKey(keyID);
+  }
+
+  String get firestoreLiveKey => sharedPreferencesService.firestoreKey;
   bool get isOnboardingComplete => state;
 }

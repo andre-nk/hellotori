@@ -37,6 +37,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
         builder: (context, watch, _){
           final eventListProvider = watch(eventStreamProvider);
           final dbProvider = watch(databaseProvider);
+          
           return eventListProvider.data!.when(
             data: (event){
               print(event[widget.index!].likes);
@@ -61,13 +62,22 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                     id: element["id"],
                     title: element["title"],
                     description: element["description"],
-                    type: element["type"],
-                    multipleChoices: element["Multiple Choices"]
+                    multipleChoices: element["multipleChoices"], 
+                    answer: element["answer"], 
+                    isActive: element["isActive"]
                   )
                 );
               });
 
-              print(activityIntents[0].title);
+              bool isActivityIntentActive(){
+                bool val = false;
+                activityIntents.forEach((element) {
+                  element.isActive == true
+                    ? val = true
+                    : val = val;
+                });
+                return val;
+              }
 
               return Scaffold(
                 body: Column(
@@ -126,7 +136,31 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Icon(HelloTori.horn, size: 26, color: Palette.blueAccent),
+                                        activityIntents.length < 0
+                                        ? Icon(HelloTori.cross, size: 26, color: Palette.blueAccent)
+                                        : activityIntents.length > 0 && isActivityIntentActive() 
+                                          ? Stack(
+                                              clipBehavior: Clip.none,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: (){},
+                                                  child: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
+                                                ),
+                                                Positioned(
+                                                  top: MQuery.height(0.02, context),
+                                                  left: MQuery.width(0.015, context),
+                                                  child: Container(
+                                                    height: 10,
+                                                    width: 10,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.red
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                            : Icon(HelloTori.horn, size: 26, color: Palette.blueAccent),
                                         Heart(
                                           dbProvider: dbProvider,
                                           event: event[widget.index!],

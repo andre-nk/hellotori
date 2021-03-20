@@ -37,14 +37,18 @@ class EventCard extends StatelessWidget {
 
     String isScheduleLive(){
       return DateTime.now().isBefore(scheduleHm)
-        ? "UPCOMING EVENT" 
+        ? "SEGERA TAYANG" 
         : event.type == "Live"
-          ? "NOW SHOWING"
-          : "PASSED EVENT";
+          ? "SIARAN LANGSUNG"
+          : "ACARA SELESAI";
     }
   // print(schedule.toString() + " " + DateTime.now().toString());
 
     return Container(
+      foregroundDecoration: BoxDecoration(
+        color: isScheduleLive() == "ACARA SELESAI" ? Colors.grey : Colors.transparent,
+        backgroundBlendMode: BlendMode.saturation
+      ),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(                      
         image: DecorationImage(

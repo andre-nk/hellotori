@@ -13,6 +13,7 @@ class _EventPageState extends State<EventPage> {
         final authModel = watch(authModelProvider);
         // final onboardingViewModel = context.read(onboardingViewModelProvider);
         final eventListProvider = watch(eventStreamProvider);
+
         return HeaderPage(
           isDetailedPage: false,
           colorStart: HexColor("48A2D6"),

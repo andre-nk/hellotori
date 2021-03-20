@@ -6,6 +6,13 @@ class SharedPreferencesService {
   final SharedPreferences sharedPreferences;
 
   static const onboardingCompleteKey = 'onboardingComplete';
+  static const firestoreLiveKey = 'firestoreLiveKey';
+
+  String get firestoreKey => sharedPreferences.getString(firestoreLiveKey) ?? "";
+
+  Future<void> setFirestoreLiveKey(String keyID) async{
+    await sharedPreferences.setString(firestoreLiveKey, keyID);
+  }
 
   Future<void> setOnboardingComplete() async {
     await sharedPreferences.setBool(onboardingCompleteKey, true);
