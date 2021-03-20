@@ -63,14 +63,14 @@ class DetailedEventPage extends ConsumerWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Font.out(
-                              overrideMaxline: true,
-                              textAlign: TextAlign.start,
-                              title: event[index!].description,
-                              fontSize: 18,
-                              family: "EinaRegular"
-                            ),
-                            SizedBox(height: MQuery.height(0.03, context)),
+                            Linkify(
+                              onOpen: (link) async {
+                                await launch(link.url);
+                              },
+                              text: event[index!].description,
+                              style: Font.style(fontSize: 18)
+                            ),  
+                            SizedBox(height: MQuery.height(0.15, context)),
                             event[index!].type == "Live" 
                             ? Container(
                               height: MQuery.height(0.1, context),

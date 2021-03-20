@@ -11,30 +11,35 @@ class LiveEventPage extends StatefulWidget {
   _LiveEventPageState createState() => _LiveEventPageState();
 }
 
-class _LiveEventPageState extends State<LiveEventPage> {
+class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateMixin{
+  
+  @override
   void initState() {
     super.initState();
-    // Enable hybrid composition.
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
+  // dismiss the animation when widgit exits screen
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  
   @override
   Widget build(BuildContext context) {
-
     String videoIDGetter(String url){
       url = url.replaceAll("https://www.youtube.com/watch?v=", "");
-      print(url);
       return url;
     }
-
     return SafeArea(
       child: Consumer(
         builder: (context, watch, _){
-
           final eventListProvider = watch(eventStreamProvider);
-
+          final dbProvider = watch(databaseProvider);
           return eventListProvider.data!.when(
             data: (event){
+              print(event[widget.index!].likes);
               // ignore: close_sinks
               YoutubePlayerController _controller = YoutubePlayerController(
                 initialVideoId: videoIDGetter(event[widget.index!].videoLink),
@@ -44,6 +49,26 @@ class _LiveEventPageState extends State<LiveEventPage> {
                     desktopMode: Platform.isWindows || Platform.isMacOS ? true : false
                 ),
               );
+
+              String schedule = event[widget.index!].schedule;
+
+              List activityIntentRaw = jsonDecode(event[widget.index!].activityIntent);
+              List<ActivityIntent> activityIntents = [];
+
+              activityIntentRaw.forEach((element) {
+                activityIntents.add(
+                  ActivityIntent(
+                    id: element["id"],
+                    title: element["title"],
+                    description: element["description"],
+                    type: element["type"],
+                    multipleChoices: element["Multiple Choices"]
+                  )
+                );
+              });
+
+              print(activityIntents[0].title);
+
               return Scaffold(
                 body: Column(
                   children: [
@@ -87,7 +112,7 @@ class _LiveEventPageState extends State<LiveEventPage> {
                                         SizedBox(height: MQuery.height(0.01, context),),
                                         Font.out(
                                           textAlign: TextAlign.start,
-                                          title: "Pukul " + event[widget.index!].schedule,
+                                          title: schedule.toString().substring(0, schedule.length - 6) + ", pukul " + schedule.substring(schedule.length - 5, schedule.length),
                                           fontSize: 18,
                                           color: Palette.black,
                                           family: "EinaRegular"                                   
@@ -96,14 +121,17 @@ class _LiveEventPageState extends State<LiveEventPage> {
                                     ),
                                   ),
                                   Container(
-                                    width: MQuery.width(0.1, context),
+                                    width: MQuery.width(0.11, context),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Icon(HelloTori.horn, size: 26, color: Palette.blueAccent),
-                                        Icon(LineIcons.heart, size: 28, color: Palette.blueAccent),
-                                      ],
+                                        Heart(
+                                          dbProvider: dbProvider,
+                                          event: event[widget.index!],
+                                        )
+                                      ]   
                                     ),
                                   )
                                 ],
@@ -113,7 +141,7 @@ class _LiveEventPageState extends State<LiveEventPage> {
                                 width: MQuery.width(1, context),
                                 color: HexColor("C4C4C4"),
                                 height: 1,
-                              )
+                              ),
                             ],
                           ),
                         ),          

@@ -1,7 +1,6 @@
 part of "widgets.dart";
 
 class EventCard extends StatelessWidget {
-
   final int index;
   final Event event;
 
@@ -10,14 +9,39 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    DateTime schedule = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      DateFormat("hh:mm").parse(event.schedule).hour,
-      DateFormat("hh:mm").parse(event.schedule).minute
+    var dateString    = event.schedule.substring(0, event.schedule.length - 5);
+    DateFormat format = new DateFormat("dd MMMM yy");
+    var formattedDate = format.parse(dateString);
+
+    DateTime scheduleHm = DateTime(
+      formattedDate.year,
+      formattedDate.month,
+      formattedDate.day,
+      DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).hour,
+      DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).minute
     );
 
+     DateTime globalScheduleToday = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day
+    );
+
+    print(!formattedDate.isAtSameMomentAs(globalScheduleToday));
+
+    String isScheduleToday(){
+      return !formattedDate.isAtSameMomentAs(globalScheduleToday) 
+        ? "Pukul " + event.schedule.substring(event.schedule.length - 5, event.schedule.length)
+        : event.schedule.toString().substring(0, event.schedule.length - 6) + ", pukul " + event.schedule.substring(event.schedule.length - 5, event.schedule.length);
+    }
+
+    String isScheduleLive(){
+      return DateTime.now().isBefore(scheduleHm)
+        ? "UPCOMING EVENT" 
+        : event.type == "Live"
+          ? "NOW SHOWING"
+          : "PASSED EVENT";
+    }
   // print(schedule.toString() + " " + DateTime.now().toString());
 
     return Container(
@@ -71,7 +95,7 @@ class EventCard extends StatelessWidget {
                     family: "EinaSemiBold"                                   
                   ),
                   Font.out(
-                    title: "Pukul " + event.schedule,
+                    title: isScheduleToday(),
                     fontSize: 18,
                     color: Palette.white,
                     family: "EinaRegular"                                   
@@ -94,13 +118,15 @@ class EventCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Font.out(
-                    title: DateTime.now().isBefore(schedule) ? "UPCOMING EVENT" : "NOW SHOWING" ,
+                    title: isScheduleLive(),
                     fontSize: 18,
                     color: Palette.white,
                     family: "EinaSemiBold"
                   ),
-                  event.type == "Live" //TODO: CHANGE TYPE TO LIVE WHEN STARTED AND TO "PASSED" IF FINISHED
-                  ? SizedBox()
+                  event.type == "Live"
+                  ? Image(
+                      image: AssetImage("assets/live_icon.png"),
+                    )
                   : event.type == "Passed"
                     ? SizedBox()
                     : Icon(Icons.access_alarms_rounded, color: Palette.white,)

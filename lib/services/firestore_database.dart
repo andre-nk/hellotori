@@ -13,9 +13,21 @@ class FirestoreDatabase{
         schedule: element["schedule"] ?? "",
         isChatEnabled: element["chatEnabled"] ?? true,
         type: element["type"] ?? "",
+        activityIntent: element["activityIntent"] ?? [],
+        likes: element["likes"] ?? 0
       ));
     });
     return eventList;
+  }
+
+  Future<void> addLikes(String uid, int currentLike){
+    return _service
+      .collection("events")
+      .doc(uid)
+      .update({
+        "likes": currentLike + 1
+      }
+    );
   }
 
   Stream<List<Event>> get eventList{
@@ -24,6 +36,5 @@ class FirestoreDatabase{
       .snapshots()
       .map(_eventListFromSnapshot);
   }
-
 }
 

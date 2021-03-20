@@ -13,4 +13,12 @@ class Font{
         fontSize: fontSize.toDouble())
     );
   }
+
+  static TextStyle style({int fontSize = 16}){
+    return TextStyle(
+      fontFamily: "EinaRegular",
+      fontWeight: FontWeight.normal,
+      fontSize: fontSize.toDouble()
+    );
+  }
 }

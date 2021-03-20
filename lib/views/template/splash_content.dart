@@ -36,13 +36,13 @@ class SplashContent extends StatelessWidget {
                 children: [
                   Font.out(
                     title: this.title,
-                    fontSize: 32,
+                    fontSize: MQuery.height(0.04, context).round(),
                     family: "EinaBold"
                   ),
                   SizedBox(height: MQuery.height(0.01, context)),
                   Font.out(
                     title: this.description,
-                    fontSize: 18,
+                    fontSize: MQuery.height(0.0225, context).round(),
                     family: "EinaRegular"
                   ),
                 ],

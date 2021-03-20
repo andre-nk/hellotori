@@ -29,4 +29,5 @@ class HelloTori {
   static const IconData badge = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData cross = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData fullscreen = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData heart_solid = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
