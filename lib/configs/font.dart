@@ -14,11 +14,12 @@ class Font{
     );
   }
 
-  static TextStyle style({int fontSize = 16}){
+  static TextStyle style({int fontSize = 16, Color? fontColor}){
     return TextStyle(
       fontFamily: "EinaRegular",
       fontWeight: FontWeight.normal,
-      fontSize: fontSize.toDouble()
+      fontSize: fontSize.toDouble(),
+      color: fontColor ?? Palette.black
     );
   }
 }

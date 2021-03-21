@@ -27,10 +27,10 @@ class EventCard extends StatelessWidget {
       DateTime.now().day
     );
 
-    print(!formattedDate.isAtSameMomentAs(globalScheduleToday));
+    print(formattedDate.isAtSameMomentAs(globalScheduleToday));
 
     String isScheduleToday(){
-      return !formattedDate.isAtSameMomentAs(globalScheduleToday) 
+      return formattedDate.isAtSameMomentAs(globalScheduleToday) 
         ? "Pukul " + event.schedule.substring(event.schedule.length - 5, event.schedule.length)
         : event.schedule.toString().substring(0, event.schedule.length - 6) + ", pukul " + event.schedule.substring(event.schedule.length - 5, event.schedule.length);
     }
@@ -91,8 +91,8 @@ class EventCard extends StatelessWidget {
                 children: [
                   Font.out( 
                     textAlign: TextAlign.start,                            
-                    title: event.title.length > 20
-                      ? event.title.substring(0,16) + "..."
+                    title: event.title.length > 25
+                      ? event.title.substring(0,21) + "..."
                       : event.title,
                     fontSize: 24,
                     color: Palette.white,

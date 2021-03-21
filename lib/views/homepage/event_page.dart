@@ -11,8 +11,13 @@ class _EventPageState extends State<EventPage> {
     return Consumer(
       builder: (context, watch, _){
         final authModel = watch(authModelProvider);
+        final dbProvider = watch(databaseProvider);
         // final onboardingViewModel = context.read(onboardingViewModelProvider);
         final eventListProvider = watch(eventStreamProvider);
+
+        dbProvider.createUserData(authModel.auth.currentUser);
+
+        print(eventListProvider);
 
         return HeaderPage(
           isDetailedPage: false,

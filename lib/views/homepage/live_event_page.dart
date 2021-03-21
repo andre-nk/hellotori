@@ -3,29 +3,24 @@ part of "../pages.dart";
 class LiveEventPage extends StatefulWidget {
 
   final int? index;
-
   const LiveEventPage({Key? key, this.index}) : super(key: key);
-
 
   @override
   _LiveEventPageState createState() => _LiveEventPageState();
 }
 
 class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateMixin{
-  
   @override
   void initState() {
     super.initState();
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
-  // dismiss the animation when widgit exits screen
   @override
   void dispose() {
     super.dispose();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     String videoIDGetter(String url){
@@ -72,14 +67,18 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
               bool isActivityIntentActive(){
                 bool val = false;
                 activityIntents.forEach((element) {
-                  element.isActive == true
-                    ? val = true
-                    : val = val;
+                  if(element.isActive == true){
+                    val = true;
+                    //TODO: LOCAL NOTIFICATION
+                  } else {
+                    val = val;
+                  }
                 });
                 return val;
               }
 
               return Scaffold(
+                resizeToAvoidBottomInset: false,
                 body: Column(
                   children: [
                     Expanded(
@@ -112,9 +111,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                       children: [
                                         Font.out(
                                           textAlign: TextAlign.start,                             
-                                          title: event[widget.index!].title.length > 20
-                                            ? event[widget.index!].title.substring(0,17) + "\n" + event[widget.index!].title.substring(20,event[widget.index!].title.length)
-                                            : event[widget.index!].title,
+                                          title: event[widget.index!].title,
                                           fontSize: 24,
                                           color: Palette.black,
                                           family: "EinaBold"                                   
@@ -143,7 +140,13 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                               clipBehavior: Clip.none,
                                               children: [
                                                 GestureDetector(
-                                                  onTap: (){},
+                                                  onTap: (){
+                                                    Get.dialog(
+                                                      IntentDialog(
+                                                        intents: activityIntents,
+                                                      )                                                       
+                                                    );
+                                                  },
                                                   child: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
                                                 ),
                                                 Positioned(

@@ -6,6 +6,17 @@ class FirestoreDatabase{
 
   final _service = FirebaseFirestore.instance;
 
+  Future<void> createUserData(User? user){
+    return _service
+      .collection("users")
+      .doc(user!.uid)
+      .set({
+        "name": user.displayName,
+        "profilePicture": user.photoURL
+      }
+    );
+  }
+
   List<Event> _eventListFromSnapshot(QuerySnapshot data) {
     final List<Event> eventList = [];
     data.docs.forEach((element) {
@@ -16,9 +27,9 @@ class FirestoreDatabase{
           description: element["description"] ?? "",
           videoLink: element["link"] ?? "",
           schedule: element["schedule"] ?? "",
-          isChatEnabled: element["chatEnabled"] ?? true,
+          isChatEnabled: element["isChatEnabled"] ?? true,
           type: element["type"] ?? "",
-          activityIntent: element["activityIntents"],
+          activityIntent: element["activityIntent"],
           likes: element["likes"] ?? 0
         )
       );
