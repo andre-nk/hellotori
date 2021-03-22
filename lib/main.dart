@@ -17,6 +17,7 @@ Future<void> main() async {
     systemNavigationBarColor: Palette.black,
     statusBarColor: Palette.blueAccent, // status bar color
   ));
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     ProviderScope(
       overrides: [

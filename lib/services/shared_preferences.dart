@@ -10,7 +10,7 @@ class SharedPreferencesService {
 
   String get firestoreKey => sharedPreferences.getString(firestoreLiveKey) ?? "";
 
-  Future<void> setFirestoreLiveKey(String keyID) async{
+  Future<void> setActivityIntents(String keyID) async{
     await sharedPreferences.setString(firestoreLiveKey, keyID);
   }
 

@@ -4,6 +4,7 @@ class Font{
   static Text out({title, int fontSize = 16, fontWeight, color, textAlign, family, bool overrideMaxline = false}){
     return Text(
       title ?? "",
+      overflow: TextOverflow.visible,
       maxLines: overrideMaxline ? 100 : 3,
       textAlign: textAlign ?? TextAlign.center,
       style: TextStyle(

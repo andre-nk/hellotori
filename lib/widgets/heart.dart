@@ -28,17 +28,17 @@ class _HeartState extends State<Heart> with SingleTickerProviderStateMixin {
       vsync: this,
     );
 
-    _colorAnimation = ColorTween(begin: Colors.grey[400], end: Colors.red)
+    _colorAnimation = ColorTween(begin: Colors.grey[400], end: ColorCollection.generateColor())
       .animate(_controller);
 
     _sizeAnimation = TweenSequence(
       <TweenSequenceItem<double>>[
         TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 30, end: 35),
+          tween: Tween<double>(begin: 30, end: 32),
           weight: 50,
         ),
         TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 35, end: 30),
+          tween: Tween<double>(begin: 35, end: 32),
           weight: 50,
         ),
       ]
@@ -70,7 +70,8 @@ class _HeartState extends State<Heart> with SingleTickerProviderStateMixin {
     return AnimatedBuilder(
       animation: _controller,
       builder: (BuildContext context, _){
-        return Column(
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             IconButton(
               icon: Icon(
@@ -88,8 +89,8 @@ class _HeartState extends State<Heart> with SingleTickerProviderStateMixin {
             ),
             AnimatedContainer(
               duration: Duration(milliseconds: 500),
-              child: Opacity(
-                opacity: opacity,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
                 child: Font.out(
                   title: "+${likesAdded < 500 ? likesAdded : 500}"
                 ),

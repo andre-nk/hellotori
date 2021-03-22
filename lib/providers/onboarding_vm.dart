@@ -15,7 +15,7 @@ class OnboardingViewModel extends StateNotifier<bool> {
   }
 
   Future<void> setFirestoreLiveKey(String keyID) async{
-    await sharedPreferencesService.setFirestoreLiveKey(keyID);
+    await sharedPreferencesService.setActivityIntents(keyID);
   }
 
   String get firestoreLiveKey => sharedPreferencesService.firestoreKey;

@@ -24,9 +24,12 @@ class AuthPage extends ConsumerWidget {
           children: [
             Positioned(
               top: 0,
-              child: Image(
-                image: AssetImage("assets/auth_photo.png"),
-                fit: BoxFit.fitWidth,
+              child: Container(
+                width: MQuery.width(0.6, context),
+                child: Image(
+                  image: AssetImage("assets/auth_photo.png"),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),          
             Positioned(

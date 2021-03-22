@@ -37,6 +37,21 @@ class FirestoreDatabase{
     return eventList;
   }
 
+  List<Chat> chatListFromSnapshot(QuerySnapshot data){
+    final List<Chat> chatList = [];
+    data.docs.forEach((element) {
+      chatList.add(
+        Chat(
+          uid: element.id,
+          senderUID: element["sender"],
+          dateTime: element["dateTime"],
+          message: element["message"]
+        )
+      );
+    });
+    return chatList;
+  }
+
   Future<void> addLikes(String uid, int currentLike){
     return _service
       .collection("events")
@@ -62,6 +77,15 @@ class FirestoreDatabase{
       .collection("events")
       .snapshots()
       .map(_eventListFromSnapshot);
+  }
+
+  Stream<List<Chat>> chatList(String eventUID){
+    return _service
+      .collection("events")
+      .doc(eventUID)
+      .collection("chat")
+      .snapshots()
+      .map(chatListFromSnapshot);
   }
 }
 

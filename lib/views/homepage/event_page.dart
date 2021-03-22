@@ -37,7 +37,7 @@ class _EventPageState extends State<EventPage> {
               GestureDetector(
                 onTap: (){},
                 child: CircleAvatar(
-                  radius: MQuery.height(0.035, context),
+                  radius: MQuery.height(0.02, context),
                   backgroundColor: Palette.lightBlueAccent,
                   backgroundImage: NetworkImage(authModel.auth.currentUser!.photoURL ?? "")
                 ),
