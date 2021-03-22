@@ -283,10 +283,6 @@ class _IntentDialogState extends State<IntentDialog> {
                             child: IconButton(
                               onPressed: (){
                                 activityIntents.removeWhere((element) => element.id == targetIntent.id);
-
-                                print(activityIntents);
-
-                                // onboardingViewModel.setFirestoreLiveKey(jsonEncode(activityIntents));
                                 setState(() {
                                   Get.back();
                                 });

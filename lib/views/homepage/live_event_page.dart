@@ -16,19 +16,11 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
   @override
   void initState() {
     super.initState(); 
-    if(scrollController.hasClients){
-      scrollController.animateTo(
-        0.0,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 300),
-      );
-    }
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   @override
   void dispose() {
-    scrollController.dispose();
     super.dispose();
   }
 
@@ -43,6 +35,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
         builder: (context, watch, _){
           final eventListProvider = watch(eventStreamProvider);
           final dbProvider = watch(databaseProvider);
+          final authProvider = watch(authModelProvider);
           final onboardingViewModel = context.read(onboardingViewModelProvider);
           
           return eventListProvider.data!.when(
@@ -62,7 +55,6 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                   DeviceOrientation.landscapeLeft,
                   DeviceOrientation.landscapeRight,
                 ]);
-                print('Entered Fullscreen');
               };
               _controller.onExitFullscreen = () {
                 SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -72,7 +64,6 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                 Future.delayed(const Duration(seconds: 5), () {
                   SystemChrome.setPreferredOrientations(DeviceOrientation.values);
                 });
-                print('Exited Fullscreen');
               };
 
               //ACTIVITY INTENTS
@@ -114,6 +105,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
               return Scaffold(
                 resizeToAvoidBottomInset: true,
                 body: ListView(
+                  controller: scrollController,
                   physics: ClampingScrollPhysics(),
                   children: [
                     Container(
@@ -139,142 +131,149 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                     width: double.infinity,
                                     child: Padding(
                                       padding: EdgeInsets.all(MQuery.width(0.03, context)),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: MQuery.width(1, context),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Font.out(
-                                                      textAlign: TextAlign.start,                             
-                                                      title: event[widget.index!].title,
-                                                      fontSize: 24,
-                                                      color: Palette.black,
-                                                      family: "EinaBold"                                   
-                                                    ),
-                                                    SizedBox(height: MQuery.height(0.005, context),),
-                                                    Font.out(
-                                                      textAlign: TextAlign.start,
-                                                      title: schedule.toString().substring(0, schedule.length - 6) + ", pukul " + schedule.substring(schedule.length - 5, schedule.length),
-                                                      fontSize: 16,
-                                                      color: Palette.black,
-                                                      family: "EinaRegular"                                   
-                                                    ),
-                                                  ],
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: MQuery.width(1, context),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Font.out(
+                                                        textAlign: TextAlign.start,                             
+                                                        title: event[widget.index!].title,
+                                                        fontSize: 24,
+                                                        color: Palette.black,
+                                                        family: "EinaBold"                                   
+                                                      ),
+                                                      SizedBox(height: MQuery.height(0.005, context),),
+                                                      Font.out(
+                                                        textAlign: TextAlign.start,
+                                                        title: schedule.toString().substring(0, schedule.length - 6) + ", pukul " + schedule.substring(schedule.length - 5, schedule.length),
+                                                        fontSize: 16,
+                                                        color: Palette.black,
+                                                        family: "EinaRegular"                                   
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(height: MQuery.height(0.015, context),),
-                                              Container(
-                                                width: MQuery.width(1, context),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    activityIntents.length < 0
-                                                    ? IconButton(
+                                                SizedBox(height: MQuery.height(0.015, context),),
+                                                Container(
+                                                  width: MQuery.width(1, context),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      IconButton(
+                                                        icon: Icon(Icons.share, color: Palette.blueAccent,),
                                                         onPressed: (){},
-                                                        icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
-                                                      )
-                                                    : activityIntents.length > 0 && isActivityIntentActive() 
-                                                      ? Stack(
-                                                          clipBehavior: Clip.none,
-                                                          children: [
-                                                            GestureDetector(
-                                                              onTap: (){
-                                                                Get.dialog(
-                                                                  IntentDialog(
-                                                                    intents: activityIntents,
-                                                                  )                                                       
-                                                                );
-                                                              },
-                                                              child: IconButton(
-                                                                onPressed: (){},
-                                                                icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
-                                                              )
-                                                            ),
-                                                            Positioned(
-                                                              top: 25,
-                                                              left: 25,
-                                                              child: Container(
-                                                                height: 10,
-                                                                width: 10,
-                                                                decoration: BoxDecoration(
-                                                                  shape: BoxShape.circle,
-                                                                  color: Colors.red
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
-                                                        : IconButton(
-                                                            onPressed: (){},
-                                                            icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
-                                                          ),
-                                                    Heart(
-                                                      dbProvider: dbProvider,
-                                                      event: event[widget.index!],
-                                                    ),
-                                                    IconButton(
-                                                      icon: Icon(Icons.share, color: Palette.blueAccent,),
-                                                      onPressed: (){},
-                                                    )
-                                                  ]   
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(height: MQuery.height(0.015, context)),
-                                          Container(
-                                            width: MQuery.width(1, context),
-                                            color: HexColor("C4C4C4"),
-                                            height: 1,
-                                          ),
-                                          SizedBox(height: MQuery.height(0.03, context)),
-                                          StreamBuilder<List<Chat>>(
-                                            stream: chatListRaw,
-                                            builder: (context, snapshot){
-                                              List<Chat> chats = snapshot.data!;
-                                              return snapshot.hasData
-                                                ? Container(
-                                                    width: MQuery.width(1, context),
-                                                    height: MQuery.height(0.55, context),
-                                                    child: ShaderMask(
-                                                      shaderCallback: (Rect rect) {
-                                                        return LinearGradient(
-                                                          begin: Alignment.topCenter,
-                                                          end: Alignment.bottomCenter,
-                                                          colors: [Colors.purple, Colors.transparent, Colors.transparent, Colors.purple],
-                                                          stops: [0.0, 0.05, 0.95, 1.0], // 10% purple, 80% transparent, 10% purple
-                                                        ).createShader(rect);
-                                                      },
-                                                      blendMode: BlendMode.dstOut,
-                                                      child: ListView.builder(
-                                                        reverse: true,
-                                                        controller: scrollController,
-                                                        physics: BouncingScrollPhysics(),
-                                                        itemCount: chats.length,
-                                                        itemBuilder: (context, index){
-                                                          print(chats);
-                                                          return BubbleMessage(
-                                                            uid: chats[index].senderUID,
-                                                            dateTime: chats[index].dateTime,
-                                                            message: chats[index].message,
+                                                      ),
+                                                      IconButton(
+                                                        onPressed: (){
+                                                          scrollController.animateTo(
+                                                            0.0,
+                                                            curve: Curves.easeOut,
+                                                            duration: const Duration(milliseconds: 300),
                                                           );
                                                         },
-                                                      ),                                                        
+                                                        icon: Icon(Icons.comment_outlined, color: Palette.blueAccent, size: 26)
+                                                      ),
+                                                      Heart(
+                                                        dbProvider: dbProvider,
+                                                        event: event[widget.index!],
+                                                      ),
+                                                      activityIntents.length < 0
+                                                      ? IconButton(
+                                                          onPressed: (){},
+                                                          icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
+                                                        )
+                                                      : activityIntents.length > 0 && isActivityIntentActive() 
+                                                        ? Stack(
+                                                            clipBehavior: Clip.none,
+                                                            children: [
+                                                              IconButton(
+                                                                onPressed: (){
+                                                                  Get.dialog(
+                                                                    IntentDialog(
+                                                                      intents: activityIntents,
+                                                                    )                                                       
+                                                                  );
+                                                                },
+                                                                icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
+                                                              ),                                                           
+                                                              Positioned(
+                                                                top: 25,
+                                                                left: 25,
+                                                                child: Container(
+                                                                  height: 10,
+                                                                  width: 10,
+                                                                  decoration: BoxDecoration(
+                                                                    shape: BoxShape.circle,
+                                                                    color: Colors.red
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          )
+                                                          : IconButton(
+                                                              onPressed: (){},
+                                                              icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
+                                                            ),
+                                                    ]   
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(height: MQuery.height(0.015, context)),
+                                            Container(
+                                              width: MQuery.width(1, context),
+                                              color: HexColor("C4C4C4"),
+                                              height: 1,
+                                            ),
+                                            SizedBox(height: MQuery.height(0.03, context)),
+                                            StreamBuilder<List<Chat>>(
+                                              stream: chatListRaw,
+                                              builder: (context, snapshot){
+                                                List<Chat> chats = snapshot.data!;
+                                                return snapshot.hasData
+                                                  ? Container(
+                                                      width: MQuery.width(1, context),
+                                                      height: MQuery.height(0.55, context),
+                                                      child: ShaderMask(
+                                                        shaderCallback: (Rect rect) {
+                                                          return LinearGradient(
+                                                            begin: Alignment.topCenter,
+                                                            end: Alignment.bottomCenter,
+                                                            colors: [Colors.purple, Colors.transparent, Colors.transparent, Colors.purple],
+                                                            stops: [0.0, 0.05, 0.95, 1.0], // 10% purple, 80% transparent, 10% purple
+                                                          ).createShader(rect);
+                                                        },
+                                                        blendMode: BlendMode.dstOut,
+                                                        child: ListView.builder(
+                                                          reverse: true,
+                                                          physics: BouncingScrollPhysics(),
+                                                          itemCount: chats.length,
+                                                          itemBuilder: (context, index){
+                                                            return BubbleMessage(
+                                                              uid: chats[index].senderUID,
+                                                              dateTime: chats[index].dateTime,
+                                                              message: chats[index].message,
+                                                            );
+                                                          },
+                                                        ),                                                        
+                                                      )
                                                     )
-                                                  )
-                                                : SizedBox();
-                                            }
-                                          )
-                                        ],
+                                                  : SizedBox();
+                                              }
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),          
                                   ),
@@ -294,6 +293,11 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                               height: MQuery.height(0.1, context),
                               child: TextField(
                                 onSubmitted: (str){
+                                  dbProvider.addChat(
+                                    authProvider.auth.currentUser!.uid,
+                                    controller.text,
+                                    DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
+                                    event[widget.index!].uid);
                                   controller.clear();
                                 },
                                 maxLines: 1,
@@ -301,13 +305,12 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                 textInputAction: TextInputAction.send,
                                 controller: controller,
                                 style: Font.style(
-                                  fontSize: MQuery.height(0.02, context).toInt()
+                                  fontSize: 18
                                 ),
                                 decoration: new InputDecoration(
-                                  suffixIcon: IconButton(
-                                    padding: EdgeInsets.only(right: 20),
-                                    icon: Icon(LineIcons.photoVideo, size: 24, color: Palette.blueAccent),
-                                    onPressed: (){},
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 20
                                   ),
                                   focusedBorder: new OutlineInputBorder(
                                     borderSide: BorderSide(color: Palette.blueAccent, width: 1.5),
@@ -321,7 +324,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                     ),
                                   ),
                                   filled: true,
-                                  hintStyle: new TextStyle(color: Colors.grey[800]),
+                                  hintStyle: new TextStyle(color: Colors.grey[800], fontSize: 18),
                                   hintText: "Ketik pesanmu...",
                                   fillColor: Colors.white70
                                 ),

@@ -14,7 +14,7 @@ import 'package:hellotori/widgets/widgets.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_hex_color/flutter_hex_color.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';

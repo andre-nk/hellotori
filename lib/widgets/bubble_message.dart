@@ -12,7 +12,7 @@ class BubbleMessage extends ConsumerWidget {
     final authModel = watch(authModelProvider);
 
     var dateString    = dateTime.substring(0, dateTime.length - 5);
-    DateFormat format = new DateFormat("dd MMMM yy");
+    DateFormat format = new DateFormat("dd MMMM yyyy");
     DateFormat format2 = new DateFormat("yMd");
     var formattedDate = format.parse(dateString);
 
@@ -24,13 +24,10 @@ class BubbleMessage extends ConsumerWidget {
 
     String isScheduleToday(){
       return formattedDate.isAtSameMomentAs(globalScheduleToday) 
-      ? dateTime.substring(dateTime.length - 4, dateTime.length)
+      ? dateTime.substring(dateTime.length - 5, dateTime.length)
       : format2.format(formattedDate) + ", " + dateTime.substring(dateTime.length - 5, dateTime.length);
     }
-
-    print(isScheduleToday());
-    print(uid == authModel.auth.currentUser!.uid);
-
+    
     return uid == authModel.auth.currentUser!.uid
       ? Padding(
           padding: EdgeInsets.symmetric(
@@ -60,8 +57,8 @@ class BubbleMessage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        message,
+                      Linkify(
+                        text: message,
                         textAlign: TextAlign.end,
                         style: TextStyle(
                           color: Palette.black,
@@ -122,9 +119,9 @@ class BubbleMessage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        message,
-                        textAlign: TextAlign.end,
+                      Linkify(
+                        text: message,
+                        textAlign: TextAlign.start,
                         style: TextStyle(
                           color: Palette.black,
                           fontSize: 18,

@@ -12,12 +12,9 @@ class _EventPageState extends State<EventPage> {
       builder: (context, watch, _){
         final authModel = watch(authModelProvider);
         final dbProvider = watch(databaseProvider);
-        // final onboardingViewModel = context.read(onboardingViewModelProvider);
         final eventListProvider = watch(eventStreamProvider);
 
         dbProvider.createUserData(authModel.auth.currentUser);
-
-        print(eventListProvider);
 
         return HeaderPage(
           isDetailedPage: false,
@@ -37,7 +34,7 @@ class _EventPageState extends State<EventPage> {
               GestureDetector(
                 onTap: (){},
                 child: CircleAvatar(
-                  radius: MQuery.height(0.02, context),
+                  radius: MQuery.height(0.035, context),
                   backgroundColor: Palette.lightBlueAccent,
                   backgroundImage: NetworkImage(authModel.auth.currentUser!.photoURL ?? "")
                 ),

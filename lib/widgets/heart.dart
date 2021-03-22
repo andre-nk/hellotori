@@ -81,7 +81,7 @@ class _HeartState extends State<Heart> with SingleTickerProviderStateMixin {
               ),
               onPressed: () {
                 widget.dbProvider!.addLikes(widget.event!.uid, widget.event!.likes);
-                isFav ? _controller.reverse() : _controller.forward();
+                isFav ? _controller.forward() : _controller.forward();
                 setState(() {
                   likesAdded++;
                 });

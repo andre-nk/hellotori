@@ -72,6 +72,19 @@ class FirestoreDatabase{
     );
   }
 
+  Future<void> addChat(String userUID, String message, String dateTime, String eventUID){
+    return _service
+      .collection("events")
+      .doc(eventUID)
+      .collection("chat")
+      .doc()
+      .set({
+        "dateTime": dateTime,
+        "sender": userUID,
+        "message": message
+      });
+  }
+
   Stream<List<Event>> get eventList{
     return _service
       .collection("events")
@@ -84,6 +97,7 @@ class FirestoreDatabase{
       .collection("events")
       .doc(eventUID)
       .collection("chat")
+      .orderBy("dateTime", descending: true)
       .snapshots()
       .map(chatListFromSnapshot);
   }

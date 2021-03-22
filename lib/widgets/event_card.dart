@@ -34,20 +34,19 @@ class EventCard extends StatelessWidget {
     }
 
     String isScheduleLive(){
-      return DateTime.now().isBefore(scheduleHm)
-        ? "SEGERA TAYANG" 
-        : event.type == "Live"
-          ? "SIARAN LANGSUNG"
-          : "ACARA SELESAI";
+      return event.type == "Live" && formattedDate.isAtSameMomentAs(globalScheduleToday)
+        ? "SIARAN LANGSUNG"
+        : event.type == "Passed" || DateFormat("dd MMMM yyyy HH:mm").parse(event.schedule).isBefore(globalScheduleToday)
+          ? "ACARA SELESAI"
+          : "SEGERA TAYANG";
     }
-  // print(schedule.toString() + " " + DateTime.now().toString());
 
     return Container(
       foregroundDecoration: BoxDecoration(
         color: isScheduleLive() == "ACARA SELESAI" ? Colors.grey : Colors.transparent,
         backgroundBlendMode: BlendMode.saturation
       ),
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(                      
         image: DecorationImage(
           image: AssetImage("assets/classic_show_1.png"),
