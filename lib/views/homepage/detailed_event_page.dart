@@ -2,7 +2,8 @@ part of "../pages.dart";
 class DetailedEventPage extends ConsumerWidget {
 
   final int? index;
-  DetailedEventPage({this.index});
+  final List<String>? share;
+  DetailedEventPage({this.index, this.share});
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -11,8 +12,6 @@ class DetailedEventPage extends ConsumerWidget {
 
     return HeaderPage(
       isDetailedPage: true,
-      colorStart: HexColor("48A2D6"),
-      colorEnd: HexColor("282C8B"),
       appBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,7 +25,9 @@ class DetailedEventPage extends ConsumerWidget {
           IconButton(
             icon: Icon(Icons.share, color: Palette.white),
             onPressed: (){
-              // Share.share("Classic Oi!");
+              Share.share(
+                share![1] + share![0]
+              );
             },
           )       
         ],
@@ -50,7 +51,9 @@ class DetailedEventPage extends ConsumerWidget {
               );
 
               String isScheduleLive(){
-                return event[index!].type == "Live" && formattedDate.isAtSameMomentAs(globalScheduleToday)
+                return event[index!].type == "Static" && DateFormat("dd MMMM yyyy HH:mm").parse(event[index!].schedule).isBefore(globalScheduleToday)
+                ? "Event OSIS!"
+                : event[index!].type == "Live" && formattedDate.isAtSameMomentAs(globalScheduleToday)
                   ? "SIARAN LANGSUNG"
                   : event[index!].type == "Passed" || DateFormat("dd MMMM yyyy HH:mm").parse(event[index!].schedule).isBefore(globalScheduleToday)
                     ? "ACARA SELESAI"
@@ -89,7 +92,7 @@ class DetailedEventPage extends ConsumerWidget {
                                 style: Font.style(fontSize: 18)
                               ),  
                               SizedBox(height: MQuery.height(0.15, context)),
-                              isScheduleLive() != "ACARA SELESAI" 
+                              isScheduleLive() != "ACARA SELESAI" || isScheduleLive() != "Event OSIS!"
                                 ? Container(
                                   height: MQuery.height(0.1, context),
                                   width: MQuery.width(0.5, context),

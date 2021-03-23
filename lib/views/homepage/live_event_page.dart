@@ -175,7 +175,11 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                                     children: [
                                                       IconButton(
                                                         icon: Icon(Icons.share, color: Palette.blueAccent,),
-                                                        onPressed: (){},
+                                                        onPressed: (){
+                                                          Share.share(
+                                                            event[widget.index!].share
+                                                          );
+                                                        },
                                                       ),
                                                       IconButton(
                                                         onPressed: (){
@@ -195,9 +199,20 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                                         stream: intentListRaw,
                                                         builder: (context, snapshot){
                                                           List<ActivityIntent>? activityIntents;
-                                                          activityIntents = snapshot.data;
+
+                                                          if(snapshot.hasData){
+                                                            activityIntents = snapshot.data!.where(
+                                                              (element) => element.isActive == true
+                                                            ).toList();
+                                                          }
+
+                                                          activityIntents!.removeWhere((element) => 
+                                                            element.userWithRightAnswer.contains(authProvider.auth.currentUser!.uid) ||
+                                                            element.userWithWrongAnswer.contains(authProvider.auth.currentUser!.uid)
+                                                          );
+
                                                           return snapshot.hasData == true
-                                                          ? activityIntents!.length < 0
+                                                          ? activityIntents.length < 0
                                                               ? IconButton(
                                                                   onPressed: (){},
                                                                   icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)

@@ -23,6 +23,8 @@ class _IntentDialogState extends State<IntentDialog> {
     description: "",
     uid: "",
     imageURL: "",
+    userWithRightAnswer: [""],
+    userWithWrongAnswer: [""],
   );
 
   TextEditingController controller = TextEditingController();
@@ -50,6 +52,7 @@ class _IntentDialogState extends State<IntentDialog> {
     return Consumer(
       builder: (BuildContext context, ScopedReader watch, _){
         final dbProvider = watch(databaseProvider);
+        final authProvider = watch(authModelProvider);
         var intentListRaw = dbProvider.intentList(widget.targetEvent!.uid);
         print(intentListRaw.length);
 
@@ -58,8 +61,16 @@ class _IntentDialogState extends State<IntentDialog> {
           builder: (context, snapshot){
             List<ActivityIntent>? activityIntents;
             if(snapshot.hasData){
-               activityIntents = snapshot.data;
+              activityIntents = snapshot.data!.where(
+                (element) => element.isActive == true
+              ).toList();
             }
+
+            activityIntents!.removeWhere((element) => 
+              element.userWithRightAnswer.contains(authProvider.auth.currentUser!.uid) ||
+              element.userWithWrongAnswer.contains(authProvider.auth.currentUser!.uid)
+            );
+
             return Dialog(
               insetPadding: EdgeInsets.symmetric(
                 horizontal: MQuery.width(0.03, context)
@@ -104,7 +115,7 @@ class _IntentDialogState extends State<IntentDialog> {
                             height: MQuery.height(0.45, context),
                             child: ListView.builder(
                               physics: BouncingScrollPhysics(),
-                              itemCount: activityIntents!.length,
+                              itemCount: activityIntents.length,
                               itemBuilder: (context, index){
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: MQuery.height(0.02, context)),
@@ -206,10 +217,20 @@ class _IntentDialogState extends State<IntentDialog> {
                                     child: ElevatedButton(
                                       onPressed: (){
                                         if(answerReviewer(controller.text) == true){
+                                          dbProvider.addQuizAnswer(
+                                            status: true,
+                                            eventUID: widget.targetEvent!.uid, 
+                                            intentID: targetIntent.uid,
+                                            currentList: targetIntent.userWithRightAnswer + [authProvider.auth.currentUser!.uid]);
                                           setState(() {
                                             isAnswerPage = [true, true];
                                           });
                                         } else {
+                                          dbProvider.addQuizAnswer(
+                                            status: false,
+                                            eventUID: widget.targetEvent!.uid, 
+                                            intentID: targetIntent.uid,
+                                            currentList: targetIntent.userWithWrongAnswer + [authProvider.auth.currentUser!.uid]);
                                           setState(() {
                                             isAnswerPage = [true, false];
                                           });

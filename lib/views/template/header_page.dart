@@ -1,13 +1,11 @@
 part of "../pages.dart";
 
 class HeaderPage extends StatelessWidget {
-  final Color? colorStart;
-  final Color? colorEnd;
   final Widget? appBar;
   final Widget? child;
   final bool? isDetailedPage;
 
-  HeaderPage({this.colorEnd, this.colorStart, this.child, this.appBar, this.isDetailedPage});
+  HeaderPage({this.child, this.appBar, this.isDetailedPage});
 
   @override
   Widget build(BuildContext context) {

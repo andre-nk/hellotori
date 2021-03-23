@@ -13,14 +13,6 @@ class EventCard extends StatelessWidget {
     DateFormat format = new DateFormat("dd MMMM yy");
     var formattedDate = format.parse(dateString);
 
-    // DateTime scheduleHm = DateTime(
-    //   formattedDate.year,
-    //   formattedDate.month,
-    //   formattedDate.day,
-    //   DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).hour,
-    //   DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).minute
-    // );
-
     DateTime globalScheduleToday = DateTime(
       DateTime.now().year,
       DateTime.now().month,
@@ -34,7 +26,9 @@ class EventCard extends StatelessWidget {
     }
 
     String isScheduleLive(){
-      return event.type == "Live" && formattedDate.isAtSameMomentAs(globalScheduleToday)
+      return event.type == "Static" && DateFormat("dd MMMM yyyy HH:mm").parse(event.schedule).isBefore(globalScheduleToday)
+        ? "Event OSIS!"
+        : event.type == "Live" && formattedDate.isAtSameMomentAs(globalScheduleToday)
         ? "SIARAN LANGSUNG"
         : event.type == "Passed" || DateFormat("dd MMMM yyyy HH:mm").parse(event.schedule).isBefore(globalScheduleToday)
           ? "ACARA SELESAI"
@@ -43,7 +37,9 @@ class EventCard extends StatelessWidget {
 
     return Container(
       foregroundDecoration: BoxDecoration(
-        color: isScheduleLive() == "ACARA SELESAI" ? Colors.grey : Colors.transparent,
+        color: isScheduleLive() == "ACARA SELESAI"
+          ? Colors.grey 
+          : Colors.transparent,
         backgroundBlendMode: BlendMode.saturation
       ),
       clipBehavior: Clip.antiAlias,

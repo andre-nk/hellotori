@@ -13,14 +13,12 @@ class _EventPageState extends State<EventPage> {
         final authModel = watch(authModelProvider);
         final dbProvider = watch(databaseProvider);
         final eventListProvider = watch(eventStreamProvider);
-        final storeProvider = watch(storageProvider);
+        // final storeProvider = watch(storageProvider);
 
         dbProvider.createUserData(authModel.auth.currentUser);
 
         return HeaderPage(
           isDetailedPage: false,
-          colorStart: HexColor("48A2D6"),
-          colorEnd: HexColor("282C8B"),
           appBar: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,23 +31,27 @@ class _EventPageState extends State<EventPage> {
                 family: "EinaBold"
               ),
               GestureDetector(
-                onTap: () async {             
-                  String _image;
-                  final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+                onTap: () async {           
+                  Get.to(() => ProfilePage(), transition: Transition.cupertino); 
+                  // String _image;
+                  // final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
-                  setState(() {
-                    if (pickedFile != null) {
-                      _image = pickedFile.path;
-                      storeProvider.uploadFile(_image);
-                    } else {
-                      print('No image selected.');
-                    }
-                  });                 
+                  // setState(() {
+                  //   if (pickedFile != null) {
+                  //     _image = pickedFile.path;
+                  //     storeProvider.uploadFile(_image);
+                  //   } else {
+                  //     print('No image selected.');
+                  //   }
+                  // });                 
                 },
-                child: CircleAvatar(
-                  radius: MQuery.height(0.035, context),
-                  backgroundColor: Palette.lightBlueAccent,
-                  backgroundImage: NetworkImage(authModel.auth.currentUser!.photoURL ?? "")
+                child: Hero(
+                  tag: "avatar",
+                  child: CircleAvatar(
+                    radius: MQuery.height(0.035, context),
+                    backgroundColor: Palette.lightBlueAccent,
+                    backgroundImage: NetworkImage(authModel.auth.currentUser!.photoURL ?? "")
+                  ),
                 ),
               ),             
             ],
@@ -74,7 +76,10 @@ class _EventPageState extends State<EventPage> {
                       itemBuilder: (context, index){
                         return GestureDetector(
                           onTap: (){
-                            Get.to(() => DetailedEventPage(index: index), transition: Transition.fadeIn);
+                            Get.to(() => DetailedEventPage(
+                                index: index, share: [event[index].title, event[index].share],
+                              ), 
+                            transition: Transition.fadeIn);
                           },
                           child: Hero(
                             tag: "hero" + index.toString(),

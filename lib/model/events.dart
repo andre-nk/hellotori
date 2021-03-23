@@ -6,6 +6,7 @@ class Event{
   String videoLink;
   String description;
   String type;
+  String share;
   String schedule;
   bool isChatEnabled;
   int likes;
@@ -18,7 +19,8 @@ class Event{
     required this.type, 
     required this.schedule, 
     required this.isChatEnabled, 
-    required this.likes
+    required this.likes,
+    required this.share
   }){
     this.uid = uid; 
     this.title = title;
@@ -28,6 +30,7 @@ class Event{
     this.schedule = schedule;
     this.isChatEnabled = isChatEnabled;
     this.likes = likes;
+    this.share = share;
   }
 }
 

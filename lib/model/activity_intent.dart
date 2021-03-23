@@ -6,6 +6,8 @@ class ActivityIntent{
   String? description;
   String imageURL; //OR QUESTION FOR INSTANCE
   List<dynamic> multipleChoices; //OR ESSAY ANSWER FOR INSTANCE
+  List<dynamic> userWithRightAnswer;
+  List<dynamic> userWithWrongAnswer;
   String answer;
   bool isActive;
 
@@ -16,7 +18,9 @@ class ActivityIntent{
     required this.description,
     required this.multipleChoices,
     required this.answer,
-    required this.imageURL
+    required this.imageURL,
+    required this.userWithRightAnswer,
+    required this.userWithWrongAnswer
   }){
     this.uid = uid;
     this.title = title;
@@ -25,14 +29,7 @@ class ActivityIntent{
     this.multipleChoices = multipleChoices;
     this.answer = answer;
     this.imageURL = imageURL;
+    this.userWithRightAnswer = userWithRightAnswer;
+    this.userWithWrongAnswer = userWithWrongAnswer;
   }
-
-  Map<String, dynamic> toJson() => {
-    "uid" : uid,
-    "title": title,
-    "isActive": isActive,
-    "description": description,
-    "multipleChoices": multipleChoices,
-    "answer": answer
-  };
 }

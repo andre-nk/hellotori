@@ -1,11 +1,8 @@
 part of 'services.dart';
 class FirestoreDatabase{
-  final String? id;
-
-  FirestoreDatabase({this.id});
-
   final _service = FirebaseFirestore.instance;
 
+  //--USER--//
   Future<void> createUserData(User? user){
     return _service
       .collection("users")
@@ -17,6 +14,7 @@ class FirestoreDatabase{
     );
   }
 
+  //--EVENT--//
   List<Event> _eventListFromSnapshot(QuerySnapshot data) {
     final List<Event> eventList = [];
     data.docs.forEach((element) {
@@ -29,13 +27,15 @@ class FirestoreDatabase{
           schedule: element["schedule"] ?? "",
           isChatEnabled: element["isChatEnabled"] ?? true,
           type: element["type"] ?? "",
-          likes: element["likes"] ?? 0
+          likes: element["likes"] ?? 0,
+          share: element["share"] ?? ""
         )
       );
     });
     return eventList;
   }
 
+  //--CHAT--//
   List<Chat> chatListFromSnapshot(QuerySnapshot data){
     final List<Chat> chatList = [];
     data.docs.forEach((element) {
@@ -51,44 +51,6 @@ class FirestoreDatabase{
     return chatList;
   }
 
-  List<ActivityIntent> intentListFromSnapshot(QuerySnapshot data){
-    final List<ActivityIntent> intentList = [];
-    data.docs.forEach((element) {
-      intentList.add(
-        ActivityIntent(
-          uid: element.id,
-          title: element["title"],
-          description: element["description"],
-          answer: element["answer"],
-          isActive: element["isActive"],
-          multipleChoices: element["multipleChoices"],
-          imageURL: element["imageURL"]
-        )
-      );
-    });
-    return intentList;
-  }
-
-  Future<void> addLikes(String uid, int currentLike){
-    return _service
-      .collection("events")
-      .doc(uid)
-      .update({
-        "likes": currentLike + 1
-      }
-    );
-  }
-
-  Future<void> addActivityIntents(String uid, String intents){
-    return _service
-      .collection("events")
-      .doc(uid)
-      .update({
-        "activityIntents": intents
-      }
-    );
-  }
-
   Future<void> addChat(String userUID, String message, String dateTime, String eventUID){
     return _service
       .collection("events")
@@ -102,6 +64,65 @@ class FirestoreDatabase{
       });
   }
 
+  //--INTENT--//
+  List<ActivityIntent> intentListFromSnapshot(QuerySnapshot data){
+    final List<ActivityIntent> intentList = [];
+    data.docs.forEach((element) {
+      intentList.add(
+        ActivityIntent(
+          uid: element.id,
+          title: element["title"],
+          description: element["description"],
+          answer: element["answer"],
+          isActive: element["isActive"],
+          multipleChoices: element["multipleChoices"],
+          imageURL: element["imageURL"],
+          userWithRightAnswer: element["right"],
+          userWithWrongAnswer: element["wrong"]
+        )
+      );
+    });
+    return intentList;
+  }
+
+  Future<void> addQuizAnswer({
+    required bool status,
+    required String eventUID,
+    required String intentID,
+    required List<dynamic> currentList
+  }){
+    
+    return status == true
+      ? _service
+        .collection("events")
+        .doc(eventUID)
+        .collection("intent")
+        .doc(intentID)
+        .update({
+          "right": currentList
+        })
+      : _service
+        .collection("events")
+        .doc(eventUID)
+        .collection("intent")
+        .doc(intentID)
+        .update({
+          "wrong": currentList
+        });
+  }
+
+  //--LIKES--//
+  Future<void> addLikes(String uid, int currentLike){
+    return _service
+      .collection("events")
+      .doc(uid)
+      .update({
+        "likes": currentLike + 1
+      }
+    );
+  }
+
+  //-- GETTER --//
   Stream<List<Event>> get eventList{
     return _service
       .collection("events")
