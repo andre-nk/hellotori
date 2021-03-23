@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';         
 import 'package:flutter/services.dart';
@@ -24,6 +25,9 @@ part "authentication/auth_page.dart";
 part "authentication/onboarding_pages.dart";
 part "homepage/event_page.dart";
 part "homepage/detailed_event_page.dart";
+part "homepage/school_page.dart";
+part "homepage/osis_page.dart";
+part "homepage/public_chat_page.dart";
 part "homepage/live_event_page.dart";
 part "homepage/profile_page.dart";
 part "template/splash_content.dart";

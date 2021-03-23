@@ -60,7 +60,7 @@ class HeaderPage extends StatelessWidget {
               right: 0,
               bottom: isDetailedPage!
                 ? MQuery.height(0.85, context)
-                : MQuery.height(0.81, context),
+                : MQuery.height(0.715, context),
               top: MQuery.height(0.0, context),
               child: Container(
                 padding: EdgeInsets.symmetric(

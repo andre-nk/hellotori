@@ -6,6 +6,63 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
+
+  int _index = 0;
+  List<Widget> _children = [
+    EventPageContent(),
+    OSISPage(),
+    SchoolPage(),
+    PublicChatPage()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    void onTabTapped(int index) {
+      setState(() {
+        _index = index;
+      });
+    }
+
+    return Scaffold(
+      body: _children[_index],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _index,
+        onTap: onTabTapped,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        items: [
+          BottomNavigationBarItem(
+            label: "a", 
+            icon: Icon(Icons.calendar_today_rounded, color: Palette.black.withOpacity(0.4), size: 24),
+            activeIcon: Icon(Icons.calendar_today_rounded, color: Palette.blueAccent, size: 24)
+          ),
+          BottomNavigationBarItem(
+            label: "a",
+            icon: Icon(Icons.star_outline_rounded, color: Palette.black.withOpacity(0.4), size: 32),
+            activeIcon: Icon(Icons.star_border_outlined, color: Palette.blueAccent, size: 30),
+          ),
+          BottomNavigationBarItem(
+            label: "a",
+            icon: Icon(Icons.school_outlined, color:Palette.black.withOpacity(0.4), size: 30),
+            activeIcon: Icon(Icons.school_outlined, color: Palette.blueAccent, size: 30),
+          ),
+          BottomNavigationBarItem(
+            label: "a",
+            icon: Icon(Icons.chat_bubble_outline, color: Palette.black.withOpacity(0.4), size: 26),
+            activeIcon: Icon(Icons.chat_bubble_outline, color: Palette.blueAccent, size: 26),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class EventPageContent extends StatefulWidget {
+  @override
+  _EventPageContentState createState() => _EventPageContentState();
+}
+class _EventPageContentState extends State<EventPageContent> {
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -57,12 +114,13 @@ class _EventPageState extends State<EventPage> {
             ],
           ),
           child: Scaffold(
-            body: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: MQuery.height(0.025, context),
-                vertical: MQuery.height(0.02, context)
-              ),
-              child: eventListProvider.data == null
+            body: FadeInUp(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MQuery.height(0.025, context),
+                  vertical: MQuery.height(0.02, context)
+                ),
+                child: eventListProvider.data == null
                 ? Center(
                     child: SpinKitCubeGrid(
                       color: Palette.blueAccent,
@@ -77,7 +135,7 @@ class _EventPageState extends State<EventPage> {
                         return GestureDetector(
                           onTap: (){
                             Get.to(() => DetailedEventPage(
-                                index: index, share: [event[index].title, event[index].share],
+                                index: index, share: [event[index].videoLink, event[index].share],
                               ), 
                             transition: Transition.fadeIn);
                           },
@@ -92,20 +150,15 @@ class _EventPageState extends State<EventPage> {
                       }
                     ),
                     error: (_,__) => Text("a"),
-                    loading: (){}
-                  ) 
-            )
-          )
+                    loading: (){
+                      
+                    }
+                ) 
+              ),
+            ),
+          ),
         );
-      },
+      }
     );
   }
 }
-
-// ElevatedButton(
-//   child: Text(eventListProvider.data.toString()),
-//   onPressed: (){
-//     authModel.signOutWithGoogle();
-//     onboardingViewModel.cancelCompleteOnboarding();
-//   },
-// )

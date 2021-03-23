@@ -177,7 +177,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                                         icon: Icon(Icons.share, color: Palette.blueAccent,),
                                                         onPressed: (){
                                                           Share.share(
-                                                            event[widget.index!].share
+                                                            event[widget.index!].share + event[widget.index!].videoLink
                                                           );
                                                         },
                                                       ),
