@@ -36,7 +36,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
           final eventListProvider = watch(eventStreamProvider);
           final dbProvider = watch(databaseProvider);
           final authProvider = watch(authModelProvider);
-          final onboardingViewModel = context.read(onboardingViewModelProvider);
+          // final onboardingViewModel = context.read(onboardingViewModelProvider);
           
           return eventListProvider.data!.when(
             data: (event){            
@@ -67,33 +67,36 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
               };
 
               //ACTIVITY INTENTS
-              onboardingViewModel.setFirestoreLiveKey(event[widget.index!].activityIntent);
-              List activityIntentRaw = jsonDecode(onboardingViewModel.firestoreLiveKey);
-              List<ActivityIntent> activityIntents = [];
-              activityIntentRaw.forEach((element) {
-                activityIntents.add(
-                  ActivityIntent(
-                    id: element["id"],
-                    title: element["title"],
-                    description: element["description"],
-                    multipleChoices: element["multipleChoices"], 
-                    answer: element["answer"], 
-                    isActive: element["isActive"]
-                  )
-                );
-              });
-              bool isActivityIntentActive(){
+              // onboardingViewModel.setFirestoreLiveKey(event[widget.index!].activityIntent);
+              // List activityIntentRaw = jsonDecode(onboardingViewModel.firestoreLiveKey);
+              // List<ActivityIntent> activityIntents = [];
+              // activityIntentRaw.forEach((element) {
+              //   activityIntents.add(
+              //     ActivityIntent(
+              //       id: element["id"],
+              //       title: element["title"],
+              //       description: element["description"],
+              //       multipleChoices: element["multipleChoices"], 
+              //       answer: element["answer"], 
+              //       isActive: element["isActive"]
+              //     )
+              //   );
+              // });
+
+              //ACTIVITY INTENT
+              var intentListRaw = dbProvider.intentList(event[widget.index!].uid);
+              bool isActivityIntentActive(List<ActivityIntent> activityIntents){
                 bool val = false;
                 activityIntents.forEach((element) {
                   if(element.isActive == true){
                     val = true;
-                    //TODO: LOCAL NOTIFICATION
                   } else {
                     val = val;
                   }
                 });
                 return val;
               }
+              print(intentListRaw.length);
 
               //LIVE CHAT
               var chatListRaw = dbProvider.chatList(event[widget.index!].uid);
@@ -188,43 +191,52 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                                         dbProvider: dbProvider,
                                                         event: event[widget.index!],
                                                       ),
-                                                      activityIntents.length < 0
-                                                      ? IconButton(
-                                                          onPressed: (){},
-                                                          icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
-                                                        )
-                                                      : activityIntents.length > 0 && isActivityIntentActive() 
-                                                        ? Stack(
-                                                            clipBehavior: Clip.none,
-                                                            children: [
-                                                              IconButton(
-                                                                onPressed: (){
-                                                                  Get.dialog(
-                                                                    IntentDialog(
-                                                                      intents: activityIntents,
-                                                                    )                                                       
-                                                                  );
-                                                                },
-                                                                icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
-                                                              ),                                                           
-                                                              Positioned(
-                                                                top: 25,
-                                                                left: 25,
-                                                                child: Container(
-                                                                  height: 10,
-                                                                  width: 10,
-                                                                  decoration: BoxDecoration(
-                                                                    shape: BoxShape.circle,
-                                                                    color: Colors.red
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          )
-                                                          : IconButton(
-                                                              onPressed: (){},
-                                                              icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
-                                                            ),
+                                                      StreamBuilder<List<ActivityIntent>>(
+                                                        stream: intentListRaw,
+                                                        builder: (context, snapshot){
+                                                          List<ActivityIntent>? activityIntents;
+                                                          activityIntents = snapshot.data;
+                                                          return snapshot.hasData == true
+                                                          ? activityIntents!.length < 0
+                                                              ? IconButton(
+                                                                  onPressed: (){},
+                                                                  icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
+                                                                )
+                                                              : activityIntents.length > 0 && isActivityIntentActive(activityIntents) 
+                                                                ? Stack(
+                                                                    clipBehavior: Clip.none,
+                                                                    children: [
+                                                                      IconButton(
+                                                                        onPressed: (){
+                                                                          Get.dialog(
+                                                                            IntentDialog(
+                                                                              targetEvent: event[widget.index!],
+                                                                            )                                                       
+                                                                          );
+                                                                        },
+                                                                        icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
+                                                                      ),                                                           
+                                                                      Positioned(
+                                                                        top: 25,
+                                                                        left: 25,
+                                                                        child: Container(
+                                                                          height: 10,
+                                                                          width: 10,
+                                                                          decoration: BoxDecoration(
+                                                                            shape: BoxShape.circle,
+                                                                            color: Colors.red
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  )
+                                                                  : IconButton(
+                                                                      onPressed: (){},
+                                                                      icon: Icon(HelloTori.horn, size: 26, color: Palette.blueAccent)
+                                                                    )
+                                                          : SizedBox();                      
+                                                        }
+                                                      )
                                                     ]   
                                                   ),
                                                 )
@@ -241,7 +253,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                               stream: chatListRaw,
                                               builder: (context, snapshot){
                                                 List<Chat> chats = snapshot.data!;
-                                                return snapshot.hasData
+                                                return snapshot.data != null
                                                   ? Container(
                                                       width: MQuery.width(1, context),
                                                       height: MQuery.height(0.55, context),

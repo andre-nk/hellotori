@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
+import 'package:image_picker/image_picker.dart';
 
 part "authentication/auth_widget.dart";
 part "authentication/auth_page.dart";

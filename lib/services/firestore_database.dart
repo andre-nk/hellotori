@@ -29,7 +29,6 @@ class FirestoreDatabase{
           schedule: element["schedule"] ?? "",
           isChatEnabled: element["isChatEnabled"] ?? true,
           type: element["type"] ?? "",
-          activityIntent: element["activityIntent"],
           likes: element["likes"] ?? 0
         )
       );
@@ -50,6 +49,24 @@ class FirestoreDatabase{
       );
     });
     return chatList;
+  }
+
+  List<ActivityIntent> intentListFromSnapshot(QuerySnapshot data){
+    final List<ActivityIntent> intentList = [];
+    data.docs.forEach((element) {
+      intentList.add(
+        ActivityIntent(
+          uid: element.id,
+          title: element["title"],
+          description: element["description"],
+          answer: element["answer"],
+          isActive: element["isActive"],
+          multipleChoices: element["multipleChoices"],
+          imageURL: element["imageURL"]
+        )
+      );
+    });
+    return intentList;
   }
 
   Future<void> addLikes(String uid, int currentLike){
@@ -100,6 +117,15 @@ class FirestoreDatabase{
       .orderBy("dateTime", descending: true)
       .snapshots()
       .map(chatListFromSnapshot);
+  }
+
+  Stream<List<ActivityIntent>> intentList(String eventUID){
+    return _service
+      .collection("events")
+      .doc(eventUID)
+      .collection("intent")
+      .snapshots()
+      .map(intentListFromSnapshot);
   }
 }
 

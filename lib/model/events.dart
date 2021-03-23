@@ -8,7 +8,6 @@ class Event{
   String type;
   String schedule;
   bool isChatEnabled;
-  String activityIntent;
   int likes;
 
   Event({
@@ -19,7 +18,6 @@ class Event{
     required this.type, 
     required this.schedule, 
     required this.isChatEnabled, 
-    required this.activityIntent,
     required this.likes
   }){
     this.uid = uid; 
@@ -29,7 +27,6 @@ class Event{
     this.type = type;
     this.schedule = schedule;
     this.isChatEnabled = isChatEnabled;
-    this.activityIntent = activityIntent;
     this.likes = likes;
   }
 }

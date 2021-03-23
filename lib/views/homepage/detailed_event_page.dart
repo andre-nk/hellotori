@@ -39,7 +39,6 @@ class DetailedEventPage extends ConsumerWidget {
           ),
           child: eventListProvider.data!.when(
             data: (event){
-
               var dateString    = event[index!].schedule.substring(0, event[index!].schedule.length - 5);
               DateFormat format = new DateFormat("dd MMMM yy");
               var formattedDate = format.parse(dateString);

@@ -13,13 +13,13 @@ class EventCard extends StatelessWidget {
     DateFormat format = new DateFormat("dd MMMM yy");
     var formattedDate = format.parse(dateString);
 
-    DateTime scheduleHm = DateTime(
-      formattedDate.year,
-      formattedDate.month,
-      formattedDate.day,
-      DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).hour,
-      DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).minute
-    );
+    // DateTime scheduleHm = DateTime(
+    //   formattedDate.year,
+    //   formattedDate.month,
+    //   formattedDate.day,
+    //   DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).hour,
+    //   DateFormat("hh:mm").parse(event.schedule.substring(event.schedule.length - 5, event.schedule.length)).minute
+    // );
 
     DateTime globalScheduleToday = DateTime(
       DateTime.now().year,

@@ -7,15 +7,12 @@ final authStateChangesProvider = StreamProvider<User?>(
 
 final databaseProvider = Provider<FirestoreDatabase>((ref) => FirestoreDatabase());
 
+final storageProvider = Provider<StorageService>((ref) => StorageService());
+
 final eventStreamProvider = StreamProvider.autoDispose<List<Event>>((ref) {
   final database = ref.watch(databaseProvider);
   return database.eventList;
 });
-
-// final chatStreamProvider = StreamProvider.autoDispose<List<Event>>((ref){
-//   final database = ref.watch(databaseProvider);
-//   return database.eventList;
-// });
 
 final onboardingViewModelProvider = StateNotifierProvider<OnboardingViewModel>((ref) {
   final sharedPreferencesService = ref.watch(sharedPreferencesServiceProvider);

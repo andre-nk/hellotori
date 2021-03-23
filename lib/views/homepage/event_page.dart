@@ -13,6 +13,7 @@ class _EventPageState extends State<EventPage> {
         final authModel = watch(authModelProvider);
         final dbProvider = watch(databaseProvider);
         final eventListProvider = watch(eventStreamProvider);
+        final storeProvider = watch(storageProvider);
 
         dbProvider.createUserData(authModel.auth.currentUser);
 
@@ -32,7 +33,19 @@ class _EventPageState extends State<EventPage> {
                 family: "EinaBold"
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: () async {             
+                  String _image;
+                  final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+
+                  setState(() {
+                    if (pickedFile != null) {
+                      _image = pickedFile.path;
+                      storeProvider.uploadFile(_image);
+                    } else {
+                      print('No image selected.');
+                    }
+                  });                 
+                },
                 child: CircleAvatar(
                   radius: MQuery.height(0.035, context),
                   backgroundColor: Palette.lightBlueAccent,
