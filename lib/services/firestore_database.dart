@@ -52,7 +52,16 @@ class FirestoreDatabase{
   }
 
   Future<void> addChat(String userUID, String message, String dateTime, String eventUID){
-    return _service
+    return eventUID == ""
+    ? _service 
+      .collection("public_chat")
+      .doc()
+      .set({
+        "dateTime": dateTime,
+        "sender": userUID,
+        "message": message
+      })
+    : _service
       .collection("events")
       .doc(eventUID)
       .collection("chat")
@@ -122,6 +131,16 @@ class FirestoreDatabase{
     );
   }
 
+  //-BIOS-//
+  Bios _articleBiosFromSnapshot(DocumentSnapshot snapshot){
+    return Bios(
+      article: snapshot.get("article"),
+      photoURL: snapshot.get("photos"),
+      uid: snapshot.id,
+      headline: snapshot.get("headline")
+    );
+  }
+
   //-- GETTER --//
   Stream<List<Event>> get eventList{
     return _service
@@ -131,13 +150,19 @@ class FirestoreDatabase{
   }
 
   Stream<List<Chat>> chatList(String eventUID){
-    return _service
-      .collection("events")
-      .doc(eventUID)
-      .collection("chat")
-      .orderBy("dateTime", descending: true)
-      .snapshots()
-      .map(chatListFromSnapshot);
+    return eventUID == ""
+      ? _service
+        .collection("public_chat")
+        .orderBy("dateTime", descending: true)
+        .snapshots()
+        .map(chatListFromSnapshot)
+      : _service
+        .collection("events")
+        .doc(eventUID)
+        .collection("chat")
+        .orderBy("dateTime", descending: true)
+        .snapshots()
+        .map(chatListFromSnapshot);
   }
 
   Stream<List<ActivityIntent>> intentList(String eventUID){
@@ -147,6 +172,22 @@ class FirestoreDatabase{
       .collection("intent")
       .snapshots()
       .map(intentListFromSnapshot);
+  }
+
+  Stream<Bios> get schoolArticle{
+    return _service
+      .collection("bios")
+      .doc("smansa-bios")
+      .snapshots()
+      .map(_articleBiosFromSnapshot);
+  }
+
+  Stream<Bios> get osisArticle{
+    return _service
+      .collection("bios")
+      .doc("osis-bios")
+      .snapshots()
+      .map(_articleBiosFromSnapshot);
   }
 }
 

@@ -264,41 +264,43 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                               height: 1,
                                             ),
                                             SizedBox(height: MQuery.height(0.03, context)),
-                                            StreamBuilder<List<Chat>>(
-                                              stream: chatListRaw,
-                                              builder: (context, snapshot){
-                                                List<Chat> chats = snapshot.data!;
-                                                return snapshot.data != null
-                                                  ? Container(
-                                                      width: MQuery.width(1, context),
-                                                      height: MQuery.height(0.55, context),
-                                                      child: ShaderMask(
-                                                        shaderCallback: (Rect rect) {
-                                                          return LinearGradient(
-                                                            begin: Alignment.topCenter,
-                                                            end: Alignment.bottomCenter,
-                                                            colors: [Colors.purple, Colors.transparent, Colors.transparent, Colors.purple],
-                                                            stops: [0.0, 0.05, 0.95, 1.0], // 10% purple, 80% transparent, 10% purple
-                                                          ).createShader(rect);
-                                                        },
-                                                        blendMode: BlendMode.dstOut,
-                                                        child: ListView.builder(
-                                                          reverse: true,
-                                                          physics: BouncingScrollPhysics(),
-                                                          itemCount: chats.length,
-                                                          itemBuilder: (context, index){
-                                                            return BubbleMessage(
-                                                              uid: chats[index].senderUID,
-                                                              dateTime: chats[index].dateTime,
-                                                              message: chats[index].message,
-                                                            );
+                                            event[widget.index!].isChatEnabled == true
+                                              ? StreamBuilder<List<Chat>>(
+                                                stream: chatListRaw,
+                                                builder: (context, snapshot){
+                                                  List<Chat> chats = snapshot.data!;
+                                                  return snapshot.data != null
+                                                    ? Container(
+                                                        width: MQuery.width(1, context),
+                                                        height: MQuery.height(0.55, context),
+                                                        child: ShaderMask(
+                                                          shaderCallback: (Rect rect) {
+                                                            return LinearGradient(
+                                                              begin: Alignment.topCenter,
+                                                              end: Alignment.bottomCenter,
+                                                              colors: [Colors.purple, Colors.transparent, Colors.transparent, Colors.purple],
+                                                              stops: [0.0, 0.05, 0.95, 1.0], // 10% purple, 80% transparent, 10% purple
+                                                            ).createShader(rect);
                                                           },
-                                                        ),                                                        
+                                                          blendMode: BlendMode.dstOut,
+                                                          child: ListView.builder(
+                                                            reverse: true,
+                                                            physics: BouncingScrollPhysics(),
+                                                            itemCount: chats.length,
+                                                            itemBuilder: (context, index){
+                                                              return BubbleMessage(
+                                                                uid: chats[index].senderUID,
+                                                                dateTime: chats[index].dateTime,
+                                                                message: chats[index].message,
+                                                              );
+                                                            },
+                                                          ),                                                        
+                                                        )
                                                       )
-                                                    )
-                                                  : SizedBox();
-                                              }
-                                            )
+                                                    : SizedBox();
+                                                }
+                                              )
+                                              : SizedBox()
                                           ],
                                         ),
                                       ),
@@ -308,56 +310,58 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                               ],
                             ),
                           ),
-                          Positioned(
-                            top: MQuery.height(1.1, context),
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: MQuery.width(0.02, context)
-                              ),
-                              height: MQuery.height(0.1, context),
-                              child: TextField(
-                                onSubmitted: (str){
-                                  dbProvider.addChat(
-                                    authProvider.auth.currentUser!.uid,
-                                    controller.text,
-                                    DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
-                                    event[widget.index!].uid);
-                                  controller.clear();
-                                },
-                                maxLines: 1,
-                                textCapitalization: TextCapitalization.sentences,
-                                textInputAction: TextInputAction.send,
-                                controller: controller,
-                                style: Font.style(
-                                  fontSize: 18
+                          event[widget.index!].isChatEnabled == true
+                           ? Positioned(
+                              top: MQuery.height(1.1, context),
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: MQuery.width(0.02, context)
                                 ),
-                                decoration: new InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 20
+                                height: MQuery.height(0.1, context),
+                                child: TextField(
+                                  onSubmitted: (str){
+                                    dbProvider.addChat(
+                                      authProvider.auth.currentUser!.uid,
+                                      controller.text,
+                                      DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
+                                      event[widget.index!].uid);
+                                    controller.clear();
+                                  },
+                                  maxLines: 1,
+                                  textCapitalization: TextCapitalization.sentences,
+                                  textInputAction: TextInputAction.send,
+                                  controller: controller,
+                                  style: Font.style(
+                                    fontSize: 18
                                   ),
-                                  focusedBorder: new OutlineInputBorder(
-                                    borderSide: BorderSide(color: Palette.blueAccent, width: 1.5),
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(50.0),
+                                  decoration: new InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 20
                                     ),
-                                  ),
-                                  border: new OutlineInputBorder(
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(50.0),
+                                    focusedBorder: new OutlineInputBorder(
+                                      borderSide: BorderSide(color: Palette.blueAccent, width: 1.5),
+                                      borderRadius: const BorderRadius.all(
+                                        const Radius.circular(50.0),
+                                      ),
                                     ),
+                                    border: new OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                        const Radius.circular(50.0),
+                                      ),
+                                    ),
+                                    filled: true,
+                                    hintStyle: new TextStyle(color: Colors.grey[800], fontSize: 18),
+                                    hintText: "Ketik pesanmu...",
+                                    fillColor: Colors.white70
                                   ),
-                                  filled: true,
-                                  hintStyle: new TextStyle(color: Colors.grey[800], fontSize: 18),
-                                  hintText: "Ketik pesanmu...",
-                                  fillColor: Colors.white70
                                 ),
-                              ),
+                              )
                             )
-                          )
+                          : SizedBox()
                         ],
                       ),
                     )

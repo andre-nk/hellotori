@@ -14,6 +14,16 @@ final eventStreamProvider = StreamProvider.autoDispose<List<Event>>((ref) {
   return database.eventList;
 });
 
+final schoolStreamProvider = StreamProvider.autoDispose<Bios>((ref){
+  final database = ref.watch(databaseProvider);
+  return database.schoolArticle;
+});
+
+final osisStreamProvider = StreamProvider.autoDispose<Bios>((ref){
+  final database = ref.watch(databaseProvider);
+  return database.osisArticle;
+});
+
 final onboardingViewModelProvider = StateNotifierProvider<OnboardingViewModel>((ref) {
   final sharedPreferencesService = ref.watch(sharedPreferencesServiceProvider);
   return OnboardingViewModel(sharedPreferencesService);

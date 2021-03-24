@@ -10,9 +10,9 @@ class _PublicChatPageState extends State<PublicChatPage> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, _){
-
+        final authProvider = watch(authModelProvider);
         final dbProvider = watch(databaseProvider);
-        var chatListRaw = dbProvider.chatList("4wcwEAIkmh4RkoltPDOU");
+        var chatListRaw = dbProvider.chatList("");
         TextEditingController controller = TextEditingController();
         ScrollController scrollController = ScrollController();         
 
@@ -40,6 +40,7 @@ class _PublicChatPageState extends State<PublicChatPage> {
             ],
           ),
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Padding(
                 padding: EdgeInsets.fromLTRB(
                   MQuery.height(0.03, context),
@@ -56,6 +57,7 @@ class _PublicChatPageState extends State<PublicChatPage> {
                           stream: chatListRaw,
                           builder: (context, snapshot) {
                             List<Chat> chats = snapshot.data!;
+                            print(chats);
                             return snapshot.data != null
                               ? Container(
                                   width: MQuery.width(1, context),
@@ -86,6 +88,7 @@ class _PublicChatPageState extends State<PublicChatPage> {
                                       physics: BouncingScrollPhysics(),
                                       itemCount: chats.length,
                                       itemBuilder: (context, index) {
+                                        print(chats[index]);
                                         return BubbleMessage(
                                           uid: chats[index].senderUID,
                                           dateTime: chats[index].dateTime,
@@ -110,12 +113,13 @@ class _PublicChatPageState extends State<PublicChatPage> {
                           height: MQuery.height(0.1, context),
                           child: TextField(
                             onSubmitted: (str){
-                              // dbProvider.addChat(
-                              //   authProvider.auth.currentUser!.uid,
-                              //   controller.text,
-                              //   DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
-                              //   event[widget.index!].uid);
-                              // controller.clear();
+                              dbProvider.addChat(
+                                authProvider.auth.currentUser!.uid,
+                                controller.text,
+                                DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
+                                ""
+                              );
+                              controller.clear();
                             },
                             maxLines: 1,
                             textCapitalization: TextCapitalization.sentences,
