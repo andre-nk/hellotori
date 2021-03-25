@@ -19,6 +19,7 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 
 part "authentication/auth_widget.dart";
 part "authentication/auth_page.dart";
@@ -32,3 +33,4 @@ part "homepage/live_event_page.dart";
 part "homepage/profile_page.dart";
 part "template/splash_content.dart";
 part "template/header_page.dart";
+part "template/image_previewer.dart";

@@ -8,6 +8,7 @@ class Event{
   String type;
   String share;
   String schedule;
+  String photo;
   bool isChatEnabled;
   int likes;
 
@@ -20,7 +21,8 @@ class Event{
     required this.schedule, 
     required this.isChatEnabled, 
     required this.likes,
-    required this.share
+    required this.share,
+    required this.photo
   }){
     this.uid = uid; 
     this.title = title;
@@ -31,6 +33,7 @@ class Event{
     this.isChatEnabled = isChatEnabled;
     this.likes = likes;
     this.share = share;
+    this.photo = photo;
   }
 }
 

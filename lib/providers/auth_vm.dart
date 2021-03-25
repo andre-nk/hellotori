@@ -21,6 +21,7 @@ class AuthenticationViewModel with ChangeNotifier {
         credentials
       );
       error = null;
+      notifyListeners();
     } catch (e) {
       error = e;
       rethrow;

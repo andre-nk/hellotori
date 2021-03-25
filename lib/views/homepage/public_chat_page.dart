@@ -24,89 +24,71 @@ class _PublicChatPageState extends State<PublicChatPage> {
           );          
         }  
 
-        return HeaderPage(
-          isDetailedPage: false,
-          appBar: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Font.out(
-                textAlign: TextAlign.start,
-                title: "Chat Publik",
-                fontSize: 24,
-                color: Palette.white,
-                family: "EinaBold"
-              ),       
-            ],
-          ),
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  MQuery.height(0.03, context),
-                  MQuery.height(0.05, context),
-                  MQuery.height(0.03, context),
-                  MQuery.height(0, context),
-                ),
-                child: Container(
-                  height: MQuery.height(1, context),
-                  child: Stack(
-                    children: [
-                      FadeInUp(
-                        child: StreamBuilder<List<Chat>>(
-                          stream: chatListRaw,
-                          builder: (context, snapshot) {
-                            List<Chat> chats = snapshot.data!;
-                            print(chats);
-                            return snapshot.data != null
-                              ? Container(
-                                  width: MQuery.width(1, context),
-                                  height: MQuery.height(0.55, context),
-                                  child: ShaderMask(
-                                    shaderCallback: (Rect rect) {
-                                      return LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.purple,
-                                          Colors.transparent,
-                                          Colors.transparent,
-                                          Colors.purple
-                                        ],
-                                        stops: [
-                                          0.0,
-                                          0.05,
-                                          0.95,
-                                          1.0
-                                        ], // 10% purple, 80% transparent, 10% purple
-                                      ).createShader(rect);
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    MQuery.height(0.03, context),
+                    MQuery.height(0.05, context),
+                    MQuery.height(0.03, context),
+                    MQuery.height(0, context),
+                  ),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        FadeInUp(
+                          child: StreamBuilder<List<Chat>>(
+                            stream: chatListRaw,
+                            builder: (context, snapshot) {
+                              List<Chat> chats = snapshot.data!;
+                              print(chats);
+                              return Container(
+                                width: MQuery.width(1, context),
+                                height: MQuery.height(0.65, context),
+                                child: ShaderMask(
+                                  shaderCallback: (Rect rect) {
+                                    return LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.purple,
+                                        Colors.transparent,
+                                        Colors.transparent,
+                                        Colors.purple
+                                      ],
+                                      stops: [
+                                        0.0,
+                                        0.05,
+                                        0.95,
+                                        1.0
+                                      ], // 10% purple, 80% transparent, 10% purple
+                                    ).createShader(rect);
+                                  },
+                                  blendMode: BlendMode.dstOut,
+                                  child: ListView.builder(
+                                    controller: scrollController,
+                                    reverse: true,
+                                    physics: BouncingScrollPhysics(),
+                                    itemCount: chats.length,
+                                    itemBuilder: (context, index) {
+                                      print(chats[index]);
+                                      return BubbleMessage(
+                                        uid: chats[index].senderUID,
+                                        dateTime: chats[index].dateTime,
+                                        message: chats[index].message,
+                                      );
                                     },
-                                    blendMode: BlendMode.dstOut,
-                                    child: ListView.builder(
-                                      controller: scrollController,
-                                      reverse: true,
-                                      physics: BouncingScrollPhysics(),
-                                      itemCount: chats.length,
-                                      itemBuilder: (context, index) {
-                                        print(chats[index]);
-                                        return BubbleMessage(
-                                          uid: chats[index].senderUID,
-                                          dateTime: chats[index].dateTime,
-                                          message: chats[index].message,
-                                        );
-                                      },
-                                    ),
-                                  ))
-                              : SizedBox();
+                                  ),
+                                )
+                              );
                             }
                           ),
-                      ),                                      
-                      Positioned(
-                        top: MQuery.height(0.555, context),
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
+                        ),                                   
+                        Container(
+                          alignment: Alignment.bottomCenter,
                           padding: EdgeInsets.symmetric(
                             horizontal: MQuery.width(0.005, context)
                           ),
@@ -150,14 +132,14 @@ class _PublicChatPageState extends State<PublicChatPage> {
                               fillColor: Colors.white70
                             ),
                           ),
-                        )
-                      )
-                    ],
+                        )                   
+                      ],
+                    ),
                   ),
                 ),
-              )
-            )
-        );
+            ),
+            ),
+        );    
       }
     );
   }

@@ -121,10 +121,13 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                               children: [
                                 Expanded(
                                   flex: 6,
-                                  child: YoutubePlayerControllerProvider( // Provides controller to all the widget below it.
-                                    controller: _controller,
-                                    child: YoutubePlayerIFrame(
-                                      aspectRatio: 16 / 9,
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: YoutubePlayerControllerProvider( // Provides controller to all the widget below it.
+                                      controller: _controller,
+                                      child: YoutubePlayerIFrame(
+                                        aspectRatio: 16 / 9,
+                                      ),
                                     ),
                                   ),
                                 ),

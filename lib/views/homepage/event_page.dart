@@ -10,7 +10,6 @@ class _EventPageState extends State<EventPage> {
   int _index = 0;
   List<Widget> _children = [
     EventPageContent(),
-    OSISPage(),
     SchoolPage(),
     PublicChatPage()
   ];
@@ -36,11 +35,6 @@ class _EventPageState extends State<EventPage> {
             label: "a", 
             icon: Icon(Icons.calendar_today_rounded, color: Palette.black.withOpacity(0.4), size: 24),
             activeIcon: Icon(Icons.calendar_today_rounded, color: Palette.blueAccent, size: 24)
-          ),
-          BottomNavigationBarItem(
-            label: "a",
-            icon: Icon(Icons.star_outline_rounded, color: Palette.black.withOpacity(0.4), size: 32),
-            activeIcon: Icon(Icons.star_border_outlined, color: Palette.blueAccent, size: 30),
           ),
           BottomNavigationBarItem(
             label: "a",

@@ -10,10 +10,10 @@ class HeaderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
-        bottom: false,
+        bottom: true,
         child: Stack(
           children: [
             Container(

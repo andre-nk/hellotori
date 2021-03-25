@@ -28,7 +28,8 @@ class FirestoreDatabase{
           isChatEnabled: element["isChatEnabled"] ?? true,
           type: element["type"] ?? "",
           likes: element["likes"] ?? 0,
-          share: element["share"] ?? ""
+          share: element["share"] ?? "",
+          photo: element["photo"]
         )
       );
     });
@@ -188,6 +189,19 @@ class FirestoreDatabase{
       .doc("osis-bios")
       .snapshots()
       .map(_articleBiosFromSnapshot);
+  }
+
+  Stream<OtherUser> otherUserProfile(String uid){
+    return _service
+      .collection("users")
+      .doc(uid)
+      .snapshots()
+      .map((event) => OtherUser(
+        uid: event.id,
+        name: event.get("name"),
+        profilePicture: event.get("profilePicture")
+      )
+    );
   }
 }
 

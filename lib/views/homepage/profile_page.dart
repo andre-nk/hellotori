@@ -4,6 +4,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final authModel = watch(authModelProvider);
+    const _url = 'https://www.instagram.com/andree.nk/';
 
     return HeaderPage(
       appBar:  Row(
@@ -15,7 +16,13 @@ class ProfilePage extends ConsumerWidget {
             onPressed: (){
               Get.back();
             },
-          ),   
+          ), 
+          IconButton(
+            icon: Icon(Icons.bug_report_sharp, color: Palette.white),
+            onPressed: (){
+              Get.back();
+            },
+          ),  
         ],
       ),
       isDetailedPage: true,
@@ -81,31 +88,52 @@ class ProfilePage extends ConsumerWidget {
                   ),
                 ],
               ),
-              Container(
-                height: MQuery.height(0.08, context),
-                width: MQuery.width(0.8, context),
-                decoration: BoxDecoration(
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Palette.blueAccent.withOpacity(0.2),
-                      blurRadius: 60,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: OnboardingButton(
-                  color: Colors.white,
-                  method: (){
-                    authModel.signOutWithGoogle();
-                    Get.offAndToNamed('/auth');
-                  },
-                  title: Font.out(
-                    title: "Keluar Akun",
-                    family: "EinaSemibold",
-                    fontSize: 20,
-                    color: Colors.red
+              Column(
+                children: [
+                  Font.out(
+                    title: "v.1.0",
+                    fontSize: 16,
+                    family: "EinaSemiBold"
                   ),
-                )
+                  SizedBox(height: MQuery.height(0.01, context)),
+                  GestureDetector(
+                    onTap: () async {
+                      await launch(_url);
+                    },
+                    child: Font.out(
+                      title: "developed with ❤️ by @andree.nk",
+                      fontSize: 16,
+                      family: "EinaRegular"
+                    ),
+                  ),
+                  SizedBox(height: MQuery.height(0.03, context)),
+                  Container(
+                    height: MQuery.height(0.08, context),
+                    width: MQuery.width(0.8, context),
+                    decoration: BoxDecoration(
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Palette.blueAccent.withOpacity(0.2),
+                          blurRadius: 60,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: OnboardingButton(
+                      color: Colors.white,
+                      method: (){
+                        authModel.signOutWithGoogle();
+                        Get.offAndToNamed('/auth');
+                      },
+                      title: Font.out(
+                        title: "Keluar Akun",
+                        family: "EinaSemibold",
+                        fontSize: 20,
+                        color: Colors.red
+                      ),
+                    )
+                  ),
+                ],
               ),
             ],
           ),

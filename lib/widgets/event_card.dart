@@ -45,7 +45,7 @@ class EventCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(                      
         image: DecorationImage(
-          image: AssetImage("assets/classic_show_1.png"),
+          image: NetworkImage(event.photo),
           fit: BoxFit.fill
         ),
         borderRadius: BorderRadius.all(Radius.circular(35))

@@ -16,7 +16,7 @@ class _OSISPageState extends State<OSISPage> {
         return osisProvider.when(
           data: (data){
             return HeaderPage(
-              isDetailedPage: false,
+              isDetailedPage: true,
               appBar: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,22 +41,26 @@ class _OSISPageState extends State<OSISPage> {
                       physics: BouncingScrollPhysics(),
                       children: [
                         data.photoURL[0] != ""
-                          ? Container(
-                              height: MQuery.height(0.325, context),
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: data.photoURL.length,
-                                physics: BouncingScrollPhysics(),
-                                itemBuilder: (context, index){
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: MQuery.width(0.01, context)
-                                    ),
-                                    child: Image.network(data.photoURL[index]),
-                                  );
-                                }
+                          ? Hero(
+                              tag: "OSIS",
+                              child: Container(
+                                height: MQuery.height(0.325, context),
+                                width: double.infinity,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: data.photoURL.length,
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: (context, index){
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: index > 0 ? MQuery.width(0.03, context) : MQuery.width(0.0, context)
+                                      ),
+                                      child: Image.network(data.photoURL[index]),
+                                    );
+                                  }
+                                ),
                               ),
-                            ) 
+                          ) 
                           : Image(image: AssetImage("assets/osis_photo.png")),
                         SizedBox(height: MQuery.height(0.03, context)),
                         Padding(
