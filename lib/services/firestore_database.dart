@@ -9,7 +9,8 @@ class FirestoreDatabase{
       .doc(user!.uid)
       .set({
         "name": user.displayName,
-        "profilePicture": user.photoURL
+        "profilePicture": user.photoURL,
+        "role": "User"
       }
     );
   }
@@ -200,6 +201,20 @@ class FirestoreDatabase{
         uid: event.id,
         name: event.get("name"),
         profilePicture: event.get("profilePicture")
+      )
+    );
+  }
+
+  Stream<MainUser> mainUserProfile(String uid){
+    return _service
+      .collection("users")
+      .doc(uid)
+      .snapshots()
+      .map((event) => MainUser(
+        uid: event.id,
+        name: event.get("name"),
+        profilePicture: event.get("profilePicture"),
+        role: event.get("role")
       )
     );
   }

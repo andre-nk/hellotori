@@ -38,6 +38,7 @@ dependencies:
   google_sign_in: ^5.0.0
   image_picker: ^0.7.3
   intl: ^0.17.0
+  multi_image_picker: ^4.8.0
   pinch_zoom: ^0.1.0-nullsafety.0
   share: ^2.0.1
   shared_preferences: ^2.0.3

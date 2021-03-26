@@ -24,6 +24,11 @@ final osisStreamProvider = StreamProvider.autoDispose<Bios>((ref){
   return database.osisArticle;
 });
 
+final mainUserStreamProvider = StreamProvider.family<MainUser, String>((ref, uid){
+  final database = ref.watch(databaseProvider);
+  return database.mainUserProfile(uid);
+});
+
 final onboardingViewModelProvider = StateNotifierProvider<OnboardingViewModel>((ref) {
   final sharedPreferencesService = ref.watch(sharedPreferencesServiceProvider);
   return OnboardingViewModel(sharedPreferencesService);
