@@ -67,8 +67,8 @@ class DetailedEventPage extends ConsumerWidget {
                     );
 
                     String isScheduleLive(){
-                      return event[index!].type == "Static" && DateFormat("dd MMMM yyyy HH:mm").parse(event[index!].schedule).isBefore(globalScheduleToday)
-                      ? "Event OSIS!"
+                      return event[index!].type == "Static"
+                      ? "Static"
                       : event[index!].type == "Live" && formattedDate.isAtSameMomentAs(globalScheduleToday)
                         ? "SIARAN LANGSUNG"
                         : event[index!].type == "Passed" || DateFormat("dd MMMM yyyy HH:mm").parse(event[index!].schedule).isBefore(globalScheduleToday)
@@ -113,7 +113,7 @@ class DetailedEventPage extends ConsumerWidget {
                                       style: Font.style(fontSize: 18)
                                     ),  
                                     SizedBox(height: MQuery.height(0.15, context)),
-                                    isScheduleLive() != "ACARA SELESAI" || isScheduleLive() != "Event OSIS!" || event[index!].type == "Passed"
+                                    event[index!].type != "Static" || event[index!].type == "Passed"
                                       ? Container(
                                         height: MQuery.height(0.1, context),
                                         width: MQuery.width(0.5, context),

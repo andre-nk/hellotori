@@ -37,6 +37,32 @@ class FirestoreDatabase{
     return eventList;
   }
 
+  Future<void> createEvent({
+    required String title,
+    required String description,
+    required String videoLink,
+    required String shareDescription,
+    required String dateTime,
+    required String type,
+    required String photoLink,
+    required bool isChatEnabled
+  }){
+    return _service
+      .collection("events")
+      .doc()
+      .set({
+        "title": title,
+        "description": description,
+        "photo": photoLink,
+        "link": videoLink,
+        "schedule": dateTime,
+        "share": shareDescription,
+        "type": type,
+        "isChatEnabled": isChatEnabled,
+        "likes": 0
+      });
+  }
+
   //--CHAT--//
   List<Chat> chatListFromSnapshot(QuerySnapshot data){
     final List<Chat> chatList = [];
@@ -147,6 +173,7 @@ class FirestoreDatabase{
   Stream<List<Event>> get eventList{
     return _service
       .collection("events")
+      .orderBy("schedule", descending: true)
       .snapshots()
       .map(_eventListFromSnapshot);
   }

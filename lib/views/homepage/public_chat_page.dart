@@ -32,14 +32,68 @@ class _PublicChatPageState extends State<PublicChatPage> {
               child: Padding(
                   padding: EdgeInsets.fromLTRB(
                     MQuery.height(0.03, context),
-                    MQuery.height(0.05, context),
+                    MQuery.height(0.025, context),
                     MQuery.height(0.03, context),
                     MQuery.height(0, context),
                   ),
                   child: Container(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+                        IconButton(
+                          icon: Icon(Icons.help_outline_rounded),
+                          onPressed: (){
+                            Get.dialog(
+                              Dialog(
+                                insetPadding: EdgeInsets.symmetric(
+                                  horizontal: MQuery.width(0.03, context)
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(20.0))
+                                ),
+                                elevation: 0.5,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minHeight: MQuery.height(0.6, context),
+                                    maxHeight: MQuery.height(0.65, context),
+                                    minWidth: MQuery.width(0.7, context),
+                                    maxWidth: MQuery.width(0.7, context)
+                                  ),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: double.infinity,
+                                    padding: EdgeInsets.all(MQuery.height(0.03, context)),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.chat_bubble_outline_rounded, size: 42),
+                                        SizedBox(height: MQuery.height(0.02, context)),
+                                        Font.out(
+                                          title: "Apa itu LiveChat?",
+                                          family: "EinaSemibold",
+                                          fontSize: 32,
+                                          color: Palette.blueAccent
+                                        ),
+                                        SizedBox(height: MQuery.height(0.02, context)),
+                                        Text(
+                                          "LiveChat adalah fitur chat publik bagi semua user hellotori. \nHarap untuk berkomunikasi mengenai topik yang relevan dengan SMA 1 Wonosobo dan event terkait. Dan jangan lupa untuk memakai bahasa sopan dan hindari topik SARA ya guys! \nThank you! \n \n 🥂",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "EinaRegular",
+                                            fontSize: 18,
+                                            color: Palette.black
+                                          )
+                                        ),
+                                      ],
+                                    )
+                                  )
+                                )
+                              )
+                            );
+                          },
+                        ),
                         FadeInUp(
+                          from: 5,
                           child: StreamBuilder<List<Chat>>(
                             stream: chatListRaw,
                             builder: (context, snapshot) {

@@ -36,13 +36,13 @@ class EventCard extends StatelessWidget {
     }
 
     return Container(
+      clipBehavior: Clip.hardEdge,
       foregroundDecoration: BoxDecoration(
         color: isScheduleLive() == "ACARA SELESAI"
           ? Colors.grey 
           : Colors.transparent,
         backgroundBlendMode: BlendMode.saturation
       ),
-      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(                      
         image: DecorationImage(
           image: NetworkImage(event.photo),
@@ -64,7 +64,7 @@ class EventCard extends StatelessWidget {
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-                  HexColor("1D59A7"),
+                  isScheduleLive() == "ACARA SELESAI" ? HexColor("48A2D6") :ColorCollection.generateColor(),
                   HexColor("48A2D6").withOpacity(0)
                 ]
               )

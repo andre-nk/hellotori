@@ -13,18 +13,15 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController shareController = TextEditingController();
   String _image = "";
+  String dateTime = DateFormat("dd MMMM yyyy").format(DateTime.now()).toString();
+  TimeOfDay timeOfday = TimeOfDay.now();
+  final String title = "";
+  bool switchValue = true;
+  String dropdownValue = "Live"; 
 
   @override
   Widget build(BuildContext context) {
-    final String title = "";
-    bool switchValue = true;
-
-    //values
-    String dropdownValue = "Live";
-    String dateTime = DateFormat("dd MMMM yy").format(DateTime.now()).toString();
-    String timeOfday = DateFormat("HH : mm").format(DateTime.now()).toString();
-
-    // Future<void> loadAssets() async {
+      // Future<void> loadAssets() async {
     //   List<Asset> resultList = <Asset>[];
     //   String error = 'No Error Detected';
     //   try {
@@ -69,6 +66,7 @@ class _AddEventState extends State<AddEvent> {
       builder: (context, watch, _){
 
         final storeProvider = watch(storageProvider);
+        final dbProvider = watch(databaseProvider);
 
         return  Scaffold(
           appBar: AppBar(
@@ -196,7 +194,7 @@ class _AddEventState extends State<AddEvent> {
                         );
                         if(picked != null){
                           setState(() {
-                            dateTime = DateFormat("dd MMMM yy").format(picked).toString();
+                            dateTime = DateFormat("dd MMMM yyyy").format(picked).toString();
                           });
                         }
                       },
@@ -223,7 +221,7 @@ class _AddEventState extends State<AddEvent> {
                         );
                         if(picked != null){
                           setState(() {
-                            timeOfday = "${picked.toString().substring(0,1) + ":" + picked.toString().substring(2,3) }";
+                            timeOfday = picked;                            
                           });
                         }
                       },
@@ -231,7 +229,13 @@ class _AddEventState extends State<AddEvent> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Font.out(
-                            title: timeOfday,
+                            title: DateFormat("HH:mm").format(DateTime(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day,
+                              timeOfday.hour,
+                              timeOfday.minute
+                            )),
                             family: "EinaRegular",
                             fontSize: 16,
                           ),
@@ -338,25 +342,81 @@ class _AddEventState extends State<AddEvent> {
                       child: OnboardingButton(
                         color: Colors.white,
                         method: () async {
-                          // storeProvider.uploadFile();
                           storeProvider.getDownloadURL(_image).then((value){
-                            print(
-                              titleController.text + 
-                              descriptionController.text +
-                              linkController.text +
-                              shareController.text +
-                              dropdownValue +
-                              dateTime + timeOfday +
-                              value +
-                              switchValue.toString() 
-                            );
-                          });               
+                            if(titleController.text == ""){
+                              Get.snackbar("Judul belum diisi", "Silahkan isi judul sebelum membuat event!");
+                            } else {
+                              dbProvider.createEvent(
+                                title: titleController.text,
+                                description: descriptionController.text,
+                                shareDescription: shareController.text,
+                                isChatEnabled: switchValue,
+                                photoLink: value,
+                                dateTime: dateTime + " " + DateFormat("HH:mm").format(DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                  timeOfday.hour,
+                                  timeOfday.minute
+                                )),
+                                videoLink: linkController.text,
+                                type: dropdownValue
+                              );
+                              Get.dialog(                            
+                                Dialog(
+                                  insetPadding: EdgeInsets.symmetric(
+                                    horizontal: MQuery.width(0.03, context)
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(20.0))
+                                  ),
+                                  elevation: 0.5,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: MQuery.height(0.6, context),
+                                      maxHeight: MQuery.height(0.65, context),
+                                      minWidth: MQuery.width(0.7, context),
+                                      maxWidth: MQuery.width(0.7, context)
+                                    ),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: double.infinity,
+                                      padding: EdgeInsets.all(MQuery.height(0.03, context)),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.check_circle, color: Colors.green, size: 42),
+                                          SizedBox(height: MQuery.height(0.02, context)),
+                                          Font.out(
+                                            title: "Berhasil!",
+                                            family: "EinaSemibold",
+                                            fontSize: 32,
+                                            color: Palette.blueAccent
+                                          ),
+                                          SizedBox(height: MQuery.height(0.02, context)),
+                                          Text(
+                                            "Silahkan review ulang event yang telah dibuat di halaman Events! \n \n 🥂",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: "EinaRegular",
+                                              fontSize: 18,
+                                              color: Palette.black
+                                            )
+                                          ),
+                                        ],
+                                      )
+                                    )
+                                  )
+                                )
+                              ).then((value) => Get.to(() => EventPage(), transition: Transition.cupertino));               
+                            } 
+                          });           
                         },
                         title: Font.out(
-                          title: "Keluar Akun",
+                          title: "Buat Event",
                           family: "EinaSemibold",
                           fontSize: 20,
-                          color: Colors.red
+                          color: Palette.blueAccent
                         ),
                       ),
                     ),

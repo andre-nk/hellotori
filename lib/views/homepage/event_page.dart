@@ -157,9 +157,14 @@ class _EventPageContentState extends State<EventPageContent> {
                               },
                               child: Hero(
                                 tag: "hero" + index.toString(),
-                                child: EventCard(
-                                  index: index,
-                                  event: event[index],
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MQuery.height(0.03, context)
+                                  ),
+                                  child: EventCard(
+                                    index: index,
+                                    event: event[index],
+                                  ),
                                 ),
                               ),
                             );
