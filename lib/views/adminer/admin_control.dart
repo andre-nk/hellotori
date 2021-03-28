@@ -1,13 +1,33 @@
-part of "../pages.dart";
+part of '../pages.dart';
 
-class AddEvent extends StatefulWidget {
+class EventControl extends StatefulWidget {
+  final String uid;
+  final String title;
+  final String description;
+  final String link;
+  final String share;
+  final String imageURL;
+  final String schedule;
+  final bool switchValue;
+  final int currentLike;
+
+  EventControl({
+    this.uid = "",
+    this.title = "",
+    this.description = "",
+    this.link = "",
+    this.share = "",
+    this.imageURL = "",
+    this.schedule = "",
+    this.switchValue = false,
+    this.currentLike = 0
+  });
+
   @override
-  _AddEventState createState() => _AddEventState();
+  _EventControlState createState() => _EventControlState();
 }
+class _EventControlState extends State<EventControl> {
 
-class _AddEventState extends State<AddEvent> {
-
-  List<Asset> images = <Asset>[];
   TextEditingController titleController = TextEditingController();
   TextEditingController linkController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -21,7 +41,7 @@ class _AddEventState extends State<AddEvent> {
 
   @override
   Widget build(BuildContext context) {
-      // Future<void> loadAssets() async {
+    // Future<void> loadAssets() async {
     //   List<Asset> resultList = <Asset>[];
     //   String error = 'No Error Detected';
     //   try {
@@ -62,17 +82,104 @@ class _AddEventState extends State<AddEvent> {
     //   );
     // }
 
+    if(widget.title != ""){
+      titleController.text = widget.title;
+      linkController.text = widget.link;
+      shareController.text = widget.share;
+      descriptionController.text = widget.description;
+      dateTime = widget.schedule;
+      switchValue = widget.switchValue;
+    }
+
     return Consumer(
       builder: (context, watch, _){
 
         final storeProvider = watch(storageProvider);
         final dbProvider = watch(databaseProvider);
 
-        return  Scaffold(
+        return Scaffold(
           appBar: AppBar(
+            toolbarHeight: MQuery.height(0.15, context),
             elevation: 0,
             backgroundColor: Colors.transparent,
             leading: Icon(Icons.arrow_back_ios_rounded, color: Palette.black,),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.delete, color: Palette.black, size: 26),
+                onPressed: (){
+                  Get.dialog(                            
+                    Dialog(
+                      insetPadding: EdgeInsets.symmetric(
+                        horizontal: MQuery.width(0.03, context)
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0))
+                      ),
+                      elevation: 0.5,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: MQuery.height(0.6, context),
+                          maxHeight: MQuery.height(0.65, context),
+                          minWidth: MQuery.width(0.7, context),
+                          maxWidth: MQuery.width(0.7, context)
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: double.infinity,
+                          padding: EdgeInsets.all(MQuery.height(0.03, context)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                children: [
+                                  Icon(Icons.warning_amber_rounded, color: Colors.red, size: 42),
+                                  SizedBox(height: MQuery.height(0.02, context)),
+                                  Font.out(
+                                    title: "Yakin mau hapus event ini?",
+                                    family: "EinaSemibold",
+                                    fontSize: 32,
+                                    color: Palette.blueAccent
+                                  ),
+                                  SizedBox(height: MQuery.height(0.02, context)),
+                                  Text(
+                                    "Event tidak akan bisa dikembalikan setelah dihapus!",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: "EinaRegular",
+                                      fontSize: 18,
+                                      color: Palette.black
+                                    )
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: MQuery.height(0.02, context)),
+                              Container(
+                                height: MQuery.height(0.055, context),
+                                width: MQuery.width(0.8, context),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.red,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0)
+                                    )                              
+                                  ),
+                                  onPressed: (){
+                                    dbProvider.deleteEvent(uid: widget.uid);
+                                    Get.back();
+                                  },
+                                  child: Text("Hapus event", style: Font.style(fontSize: 18, fontColor: Palette.white))
+                                ),
+                              )
+                            ],
+                          )
+                        )
+                      )
+                    )
+                  ).then((value) => Get.to(() => EventPage(), transition: Transition.cupertino));
+                },
+              )  
+            ],
             title: Text(title),
           ),
           body: SafeArea(
@@ -265,14 +372,15 @@ class _AddEventState extends State<AddEvent> {
                         )
                       ],
                     ),
-                    SizedBox(height: MQuery.height(0.03, context)), 
+                    SizedBox(height: MQuery.height(0.02, context)), 
                     ConstrainedBox(
                       constraints: BoxConstraints(
                         minWidth: double.infinity,
-                        minHeight: 350,
-                        maxHeight: 350
+                        minHeight: MQuery.height(0.15, context),
+                        maxHeight:  MQuery.height(0.225, context)
                       ),
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: HexColor("C4C4C4").withOpacity(0.1),
@@ -315,13 +423,36 @@ class _AddEventState extends State<AddEvent> {
                                   child: Text("Hapus gambar"),
                                   onPressed: (){
                                     setState(() {
-                                      images = [];                                  
+                                      _image = "";                                  
                                     });
                                   },
                                 ),
                               ],
                             ),
                             SizedBox(height: MQuery.height(0.01, context)),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              margin: EdgeInsets.symmetric(
+                                horizontal: MQuery.width(0.02, context)
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: MQuery.width(0.02, context)
+                              ),
+                              height: MQuery.height(0.075, context),
+                              width: 0.8 * double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                color: Colors.white,
+                                border: Border.all(color: HexColor("C4C4C4"))
+                              ),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Font.out(
+                                  title: _image,
+                                  fontSize: 16
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -342,16 +473,113 @@ class _AddEventState extends State<AddEvent> {
                       child: OnboardingButton(
                         color: Colors.white,
                         method: () async {
-                          storeProvider.getDownloadURL(_image).then((value){
+                          if(_image != ""){
+                            storeProvider.getDownloadURL(_image).then((value){
+                              if(titleController.text == ""){
+                                Get.snackbar("Judul belum diisi", "Silahkan isi judul sebelum membuat event!");
+                              } else {
+                                if(widget.title != ""){
+                                  print('edit');
+                                  dbProvider.editEvent(
+                                    uid: widget.uid,
+                                    title: titleController.text,
+                                    description: descriptionController.text,
+                                    shareDescription: shareController.text,
+                                    isChatEnabled: switchValue,
+                                    photoLink: value,
+                                    dateTime: dateTime + " " + DateFormat("HH:mm").format(DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      timeOfday.hour,
+                                      timeOfday.minute
+                                    )),
+                                    videoLink: linkController.text,
+                                    type: dropdownValue,
+                                    currentLike: widget.currentLike
+                                  );
+                                } else {
+                                  print('create');
+                                  dbProvider.createEvent(
+                                    title: titleController.text,
+                                    description: descriptionController.text,
+                                    shareDescription: shareController.text,
+                                    isChatEnabled: switchValue,
+                                    photoLink: value,
+                                    dateTime: dateTime + " " + DateFormat("HH:mm").format(DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      timeOfday.hour,
+                                      timeOfday.minute
+                                    )),
+                                    videoLink: linkController.text,
+                                    type: dropdownValue
+                                  );
+                                }                             
+                                Get.dialog(                            
+                                  Dialog(
+                                    insetPadding: EdgeInsets.symmetric(
+                                      horizontal: MQuery.width(0.03, context)
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20.0))
+                                    ),
+                                    elevation: 0.5,
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        minHeight: MQuery.height(0.6, context),
+                                        maxHeight: MQuery.height(0.65, context),
+                                        minWidth: MQuery.width(0.7, context),
+                                        maxWidth: MQuery.width(0.7, context)
+                                      ),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: double.infinity,
+                                        padding: EdgeInsets.all(MQuery.height(0.03, context)),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.check_circle, color: Colors.green, size: 42),
+                                            SizedBox(height: MQuery.height(0.02, context)),
+                                            Font.out(
+                                              title: widget.title == "" ? "Berhasil!" : "Berhasil Diedit!",
+                                              family: "EinaSemibold",
+                                              fontSize: 32,
+                                              color: Palette.blueAccent
+                                            ),
+                                            SizedBox(height: MQuery.height(0.02, context)),
+                                            Text(
+                                              widget.title == ""
+                                              ? "Silahkan review ulang event yang telah dibuat di halaman Events! \n \n 🥂"
+                                              : "Silahkan review ulang event yang telah diedit di halaman Events! \n \n 🥂",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: "EinaRegular",
+                                                fontSize: 18,
+                                                color: Palette.black
+                                              )
+                                            ),
+                                          ],
+                                        )
+                                      )
+                                    )
+                                  )
+                                ).then((value) => Get.to(() => EventPage(), transition: Transition.cupertino));               
+                              } 
+                            });  
+                          } else {
                             if(titleController.text == ""){
                               Get.snackbar("Judul belum diisi", "Silahkan isi judul sebelum membuat event!");
                             } else {
-                              dbProvider.createEvent(
+                              print('edit');
+                              dbProvider.editEvent(
+                                uid: widget.uid,
                                 title: titleController.text,
                                 description: descriptionController.text,
                                 shareDescription: shareController.text,
                                 isChatEnabled: switchValue,
-                                photoLink: value,
+                                photoLink: widget.imageURL,
                                 dateTime: dateTime + " " + DateFormat("HH:mm").format(DateTime(
                                   DateTime.now().year,
                                   DateTime.now().month,
@@ -360,8 +588,9 @@ class _AddEventState extends State<AddEvent> {
                                   timeOfday.minute
                                 )),
                                 videoLink: linkController.text,
-                                type: dropdownValue
-                              );
+                                type: dropdownValue,
+                                currentLike: widget.currentLike
+                              );                                                        
                               Get.dialog(                            
                                 Dialog(
                                   insetPadding: EdgeInsets.symmetric(
@@ -388,14 +617,16 @@ class _AddEventState extends State<AddEvent> {
                                           Icon(Icons.check_circle, color: Colors.green, size: 42),
                                           SizedBox(height: MQuery.height(0.02, context)),
                                           Font.out(
-                                            title: "Berhasil!",
+                                            title: widget.title == "" ? "Berhasil!" : "Berhasil Diedit!",
                                             family: "EinaSemibold",
                                             fontSize: 32,
                                             color: Palette.blueAccent
                                           ),
                                           SizedBox(height: MQuery.height(0.02, context)),
                                           Text(
-                                            "Silahkan review ulang event yang telah dibuat di halaman Events! \n \n 🥂",
+                                            widget.title == ""
+                                            ? "Silahkan review ulang event yang telah dibuat di halaman Events! \n \n 🥂"
+                                            : "Silahkan review ulang event yang telah diedit di halaman Events! \n \n 🥂",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontFamily: "EinaRegular",
@@ -409,11 +640,11 @@ class _AddEventState extends State<AddEvent> {
                                   )
                                 )
                               ).then((value) => Get.to(() => EventPage(), transition: Transition.cupertino));               
-                            } 
-                          });           
+                            }                         
+                          }       
                         },
                         title: Font.out(
-                          title: "Buat Event",
+                          title: widget.title == "" ? "Buat Event" : "Edit Event",
                           family: "EinaSemibold",
                           fontSize: 20,
                           color: Palette.blueAccent

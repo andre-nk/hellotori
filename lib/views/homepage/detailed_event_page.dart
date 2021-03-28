@@ -1,9 +1,9 @@
 part of "../pages.dart";
 class DetailedEventPage extends ConsumerWidget {
 
+  final Event? event;
   final int? index;
-  final List<String>? share;
-  DetailedEventPage({this.index, this.share});
+  DetailedEventPage({this.event, this.index});
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -31,7 +31,7 @@ class DetailedEventPage extends ConsumerWidget {
                   icon: Icon(Icons.share, color: Palette.white),
                   onPressed: (){
                     Share.share(
-                      share![1] + share![0]
+                      event!.share
                     );
                   },
                 )       
@@ -45,7 +45,17 @@ class DetailedEventPage extends ConsumerWidget {
                     backgroundColor: Palette.blueAccent,
                     child: Icon(Icons.edit_rounded, size: 28),
                     onPressed: (){
-                      print(mainUserProvider.data!.value.role);
+                      Get.to(() => EventControl(
+                        uid: event!.uid,
+                        title: event!.title,
+                        description: event!.description,
+                        link: event!.videoLink,
+                        share: event!.share,
+                        imageURL: event!.photo,
+                        schedule: event!.schedule,
+                        switchValue: event!.isChatEnabled,
+                        currentLike: event!.likes,
+                      ));
                     },
                   )
                 : SizedBox(),
@@ -56,25 +66,6 @@ class DetailedEventPage extends ConsumerWidget {
                 ),
                 child: eventListProvider.data!.when(
                   data: (event){
-                    var dateString    = event[index!].schedule.substring(0, event[index!].schedule.length - 5);
-                    DateFormat format = new DateFormat("dd MMMM yy");
-                    var formattedDate = format.parse(dateString);
-
-                    DateTime globalScheduleToday = DateTime(
-                      DateTime.now().year,
-                      DateTime.now().month,
-                      DateTime.now().day
-                    );
-
-                    String isScheduleLive(){
-                      return event[index!].type == "Static"
-                      ? "Static"
-                      : event[index!].type == "Live" && formattedDate.isAtSameMomentAs(globalScheduleToday)
-                        ? "SIARAN LANGSUNG"
-                        : event[index!].type == "Passed" || DateFormat("dd MMMM yyyy HH:mm").parse(event[index!].schedule).isBefore(globalScheduleToday)
-                          ? "ACARA SELESAI"
-                          : "SEGERA TAYANG";
-                    }
                     return ListView(
                       physics: BouncingScrollPhysics(),
                       children: [

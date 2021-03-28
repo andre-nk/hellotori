@@ -63,6 +63,43 @@ class FirestoreDatabase{
       });
   }
 
+  Future<void> editEvent({
+    required String title,
+    required String description,
+    required String videoLink,
+    required String shareDescription,
+    required String dateTime,
+    required String type,
+    required String photoLink,
+    required bool isChatEnabled,
+    required int currentLike,
+    required String uid,
+  }){
+    return _service
+      .collection("events")
+      .doc(uid)
+      .update({
+        "title": title,
+        "description": description,
+        "photo": photoLink,
+        "link": videoLink,
+        "schedule": dateTime,
+        "share": shareDescription,
+        "type": type,
+        "isChatEnabled": isChatEnabled,
+        "likes": currentLike
+      });
+  }
+
+  Future<void> deleteEvent({
+    required String uid
+  }){
+    return _service
+      .collection("events")
+      .doc(uid)
+      .delete();
+  }
+
   //--CHAT--//
   List<Chat> chatListFromSnapshot(QuerySnapshot data){
     final List<Chat> chatList = [];
@@ -167,6 +204,22 @@ class FirestoreDatabase{
       uid: snapshot.id,
       headline: snapshot.get("headline")
     );
+  }
+
+  Future<void> editBios({
+    required String headline,
+    required String article,
+    required List<dynamic> photoURLs,
+    required String type
+  }){
+    return _service
+      .collection("bios")
+      .doc(type == "school" ? "smansa-bios" : "osis-bios") 
+      .update({
+        "headline": headline,
+        "article": article,
+        "photos": photoURLs
+      });
   }
 
   //-- GETTER --//

@@ -193,7 +193,11 @@ class SchoolPageContent extends StatelessWidget {
                             backgroundColor: Palette.blueAccent,
                             child: Icon(Icons.edit_rounded, size: 28),
                             onPressed: (){
-                              print(mainUserProvider.data!.value.role);
+                              Get.to(() => ArticleControl(
+                                imageURLs: data.photoURL,
+                                article: data.article,
+                                header: data.headline ?? ""
+                              ));
                             },
                           )
                         : SizedBox(),

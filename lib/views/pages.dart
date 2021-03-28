@@ -20,7 +20,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 part "authentication/auth_widget.dart";
@@ -36,4 +35,5 @@ part "homepage/profile_page.dart";
 part "template/splash_content.dart";
 part "template/header_page.dart";
 part "template/image_previewer.dart";
-part "adminer/admin_add_event.dart";
+part 'adminer/admin_control.dart';
+part 'adminer/article_control.dart';

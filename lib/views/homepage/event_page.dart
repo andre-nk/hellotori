@@ -94,18 +94,7 @@ class _EventPageContentState extends State<EventPageContent> {
                   ),
                   GestureDetector(
                     onTap: () async {           
-                      Get.to(() => ProfilePage(isMainPage: true), transition: Transition.cupertino); 
-                      // String _image;
-                      // final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
-
-                      // setState(() {
-                      //   if (pickedFile != null) {
-                      //     _image = pickedFile.path;
-                      //     storeProvider.uploadFile(_image);
-                      //   } else {
-                      //     print('No image selected.');
-                      //   }
-                      // });                 
+                      Get.to(() => ProfilePage(isMainPage: true), transition: Transition.cupertino);                 
                     },
                     child: Hero(
                       tag: "avatar",
@@ -126,7 +115,7 @@ class _EventPageContentState extends State<EventPageContent> {
                       backgroundColor: Palette.blueAccent,
                       child: Icon(Icons.add_rounded, size: 28),
                       onPressed: (){
-                        Get.to(() => AddEvent(), transition: Transition.cupertino);
+                        Get.to(() => EventControl(), transition: Transition.cupertino);
                       },
                     )
                   : SizedBox(),
@@ -151,7 +140,8 @@ class _EventPageContentState extends State<EventPageContent> {
                             return GestureDetector(
                               onTap: (){
                                 Get.to(() => DetailedEventPage(
-                                    index: index, share: [event[index].videoLink, event[index].share],
+                                    index: index,
+                                    event: event[index],
                                   ), 
                                 transition: Transition.fadeIn);
                               },

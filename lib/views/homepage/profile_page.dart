@@ -9,7 +9,8 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final authModel = watch(authModelProvider);
-    const _url = 'https://www.instagram.com/andree.nk/';
+    const _url = 'https://www.instagram.com/smansasatria/';
+    const _url2 = "mailto:andreasnotokusumo23@gmail.com";
 
     return SafeArea(
       child: HeaderPage(
@@ -17,20 +18,12 @@ class ProfilePage extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            isMainPage == true
-            ? IconButton(
-                icon: Icon(Icons.arrow_back_ios_rounded, color: Palette.white),
-                onPressed: (){
-                  Get.back();
-                },
-              )
-            : SizedBox(),
             IconButton(
-              icon: Icon(Icons.bug_report_sharp, color: Palette.white),
+              icon: Icon(Icons.arrow_back_ios_rounded, color: Palette.white),
               onPressed: (){
                 Get.back();
               },
-            ),  
+            )
           ],
         ),
         isDetailedPage: true,
@@ -74,7 +67,7 @@ class ProfilePage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: MQuery.height(0.025, context)),
+                    SizedBox(height: MQuery.height(0.04, context)),
                     Container(
                       width:  double.infinity,
                       child: Column(
@@ -94,6 +87,25 @@ class ProfilePage extends ConsumerWidget {
                         ],
                       ),
                     ),
+                    SizedBox(height: MQuery.height(0.04, context)),
+                    InkWell(
+                      onTap: () async {
+                        await launch(_url2);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Font.out(
+                            title: "Kontak developer",
+                            fontSize: 18,
+                            family: "EinaRegular"
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
                 Column(
@@ -109,7 +121,7 @@ class ProfilePage extends ConsumerWidget {
                         await launch(_url);
                       },
                       child: Font.out(
-                        title: "developed with ❤️ by @andree.nk",
+                        title: "from Satria SMANSA with ❤️",
                         fontSize: 14,
                         family: "EinaRegular"
                       ),
