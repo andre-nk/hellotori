@@ -185,6 +185,59 @@ class FirestoreDatabase{
         });
   }
 
+  Future<void> createIntent({
+    required String eventUID,
+    required String title,
+    required String description,
+    required String answer,
+    required String imageURL,
+    required List<dynamic> multipleChoices,
+  }){
+    return _service
+      .collection("events")
+      .doc(eventUID)
+      .collection("intent")
+      .doc()
+      .set({
+        "title": title,
+        "description": description,
+        "answer": answer,
+        "imageURL": imageURL,
+        "multipleChoices": multipleChoices,
+        "right": [],
+        "wrong": [],
+        "isActive": true
+      });
+  }
+
+  Future<void> updateIntent({
+    required String eventUID,
+    required String title,
+    required String description,
+    required String answer,
+    required String imageURL,
+    required List<dynamic> multipleChoices,
+    required List<dynamic> right,
+    required List<dynamic> wrong,
+    required bool isActive
+  }){
+    return _service
+      .collection("events")
+      .doc(eventUID)
+      .collection("intent")
+      .doc()
+      .set({
+        "title": title,
+        "description": description,
+        "answer": answer,
+        "imageURL": imageURL,
+        "multipleChoices": multipleChoices,
+        "right": right,
+        "wrong": wrong,
+        "isActive": isActive
+      });
+  }
+
   //--LIKES--//
   Future<void> addLikes(String uid, int currentLike){
     return _service
@@ -222,7 +275,81 @@ class FirestoreDatabase{
       });
   }
 
+  //SHOP
+  List _shopInfoGenerator(DocumentSnapshot snapshot){
+    return [
+      snapshot.get("contact"),
+      snapshot.get("imageHeader")
+    ];
+  }
+
+  List<ShopItemModel> _shopItemFromSnapshot(QuerySnapshot data){
+    final List<ShopItemModel> itemList = [];
+    data.docs.forEach((element) {
+      itemList.add(
+        ShopItemModel(
+          uid: element.id,
+          title: element["title"],
+          description: element["description"],
+          imageURL: element["imageURL"],
+          price: element["price"]
+        )
+      );
+    });
+    return itemList;
+  }
+
+  Future<void> addShopItem({
+    required String title,
+    required String description,
+    required String imageURL,
+    required int price
+  }){
+    return _service
+      .collection("shop")
+      .doc()
+      .set({
+        "title": title,
+        "description": description,
+        "imageURL": imageURL,
+        "price": price
+      });
+  }
+
+  Future<void> editShopItem({
+    required String eventUID,
+    required String title,
+    required String description,
+    required String imageURL,
+    required int price
+  }){
+    return _service
+      .collection("shop")
+      .doc(eventUID)
+      .update({
+        "title": title,
+        "description": description,
+        "imageURL": imageURL,
+        "price": price
+      });
+  }
+
   //-- GETTER --//
+  Stream<List> get shopBios{
+    return _service
+      .collection("bios")
+      .doc("shop-bios")
+      .snapshots()
+      .map(_shopInfoGenerator);
+  }
+
+  Stream<List<ShopItemModel>> get itemList{
+    return _service
+      .collection("shop")
+      .snapshots()
+      .map(_shopItemFromSnapshot);
+  }
+
   Stream<List<Event>> get eventList{
     return _service
       .collection("events")

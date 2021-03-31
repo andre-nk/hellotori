@@ -12,9 +12,7 @@ class _EventPageState extends State<EventPage> {
     EventPageContent(),
     SchoolPage(),
     PublicChatPage(),
-    ProfilePage(
-      isMainPage: false,
-    )
+    ShopPage()
   ];
 
   @override
@@ -51,8 +49,8 @@ class _EventPageState extends State<EventPage> {
           ),
           BottomNavigationBarItem(
             label: "a",
-            icon: Icon(Icons.person_outline_rounded, color: Palette.black.withOpacity(0.4), size: 26),
-            activeIcon: Icon(Icons.person_rounded, color: Palette.blueAccent, size: 26),
+            icon: Icon(Icons.shopping_bag_outlined, color: Palette.black.withOpacity(0.4), size: 26),
+            activeIcon: Icon(Icons.shopping_bag_rounded, color: Palette.blueAccent, size: 26),
           )
         ],
       ),

@@ -8,6 +8,7 @@ import 'package:hellotori/configs/hello_tori_icons.dart';
 import 'package:hellotori/model/model.dart';
 import 'package:hellotori/providers/providers.dart';
 import 'package:hellotori/services/services.dart';
+import 'package:hellotori/views/pages.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,3 +17,4 @@ part "event_card.dart";
 part "heart.dart";
 part 'intent_dialog.dart';
 part "bubble_message.dart";
+part "shop_card.dart";

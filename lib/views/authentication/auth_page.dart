@@ -1,10 +1,5 @@
 part of "../pages.dart";
 
-
-final authModelProvider = ChangeNotifierProvider<AuthenticationViewModel>(
-  (ref) => AuthenticationViewModel(auth: ref.watch(firebaseAuthProvider)),
-);
-
 class AuthPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {

@@ -11,7 +11,8 @@ class LiveEventPage extends StatefulWidget {
 
 class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateMixin{
   
-  ScrollController scrollController = ScrollController();         
+  ScrollController scrollController = ScrollController();
+  List<ActivityIntent>? localIntent;
 
   @override
   void initState() {
@@ -36,7 +37,6 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
           final eventListProvider = watch(eventStreamProvider);
           final dbProvider = watch(databaseProvider);
           final authProvider = watch(authModelProvider);
-          // final onboardingViewModel = context.read(onboardingViewModelProvider);
           
           return eventListProvider.data!.when(
             data: (event){            
@@ -66,23 +66,6 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                 });
               };
 
-              //ACTIVITY INTENTS
-              // onboardingViewModel.setFirestoreLiveKey(event[widget.index!].activityIntent);
-              // List activityIntentRaw = jsonDecode(onboardingViewModel.firestoreLiveKey);
-              // List<ActivityIntent> activityIntents = [];
-              // activityIntentRaw.forEach((element) {
-              //   activityIntents.add(
-              //     ActivityIntent(
-              //       id: element["id"],
-              //       title: element["title"],
-              //       description: element["description"],
-              //       multipleChoices: element["multipleChoices"], 
-              //       answer: element["answer"], 
-              //       isActive: element["isActive"]
-              //     )
-              //   );
-              // });
-
               //ACTIVITY INTENT
               var intentListRaw = dbProvider.intentList(event[widget.index!].uid);
               bool isActivityIntentActive(List<ActivityIntent> activityIntents){
@@ -96,7 +79,6 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                 });
                 return val;
               }
-              print(intentListRaw.length);
 
               //LIVE CHAT
               var chatListRaw = dbProvider.chatList(event[widget.index!].uid);
@@ -203,16 +185,24 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                                         builder: (context, snapshot){
                                                           List<ActivityIntent>? activityIntents;
 
+                                                          //extract stream
                                                           if(snapshot.hasData){
                                                             activityIntents = snapshot.data!.where(
                                                               (element) => element.isActive == true
                                                             ).toList();
                                                           }
 
+                                                          //filter intents
                                                           activityIntents!.removeWhere((element) => 
                                                             element.userWithRightAnswer.contains(authProvider.auth.currentUser!.uid) ||
                                                             element.userWithWrongAnswer.contains(authProvider.auth.currentUser!.uid)
                                                           );
+
+                                                          //detect new intents
+                                                          if(localIntent != activityIntents){
+                                                            print(activityIntents.last.title);
+                                                            localIntent = activityIntents;                                                              
+                                                          }
 
                                                           return snapshot.hasData == true
                                                           ? activityIntents.length < 0

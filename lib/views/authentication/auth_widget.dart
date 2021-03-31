@@ -10,9 +10,11 @@ class AuthWidget extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final authStateChanges = watch(authStateChangesProvider);
     return authStateChanges.when(
-      data: (user) => user != null
-        ? signedInBuilder!(context)
-        : nonSignedInBuilder!(context),
+      data: (user){
+        return user != null
+          ? signedInBuilder!(context)
+          : nonSignedInBuilder!(context);
+      },
       loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),

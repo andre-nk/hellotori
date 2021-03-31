@@ -42,7 +42,12 @@ class _ArticleControlState extends State<ArticleControl> {
             toolbarHeight: MQuery.height(0.15, context),
             elevation: 0,
             backgroundColor: Colors.transparent,
-            leading: Icon(Icons.arrow_back_ios_rounded, color: Palette.black),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios_rounded, color: Palette.black,),
+              onPressed: (){
+                Get.back();
+              },  
+            ),
           ),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -252,7 +257,7 @@ class _ArticleControlState extends State<ArticleControl> {
                                   )
                                 )
                               )
-                            ).then((value) => Get.to(() => SchoolPage(), transition: Transition.cupertino));               
+                            ).then((value) => Get.offAll(EventPage(), transition: Transition.cupertino));               
                           } else {
                             dbProvider.editBios(
                               headline: headerController.text,
@@ -306,7 +311,7 @@ class _ArticleControlState extends State<ArticleControl> {
                                   )
                                 )
                               )
-                            ).then((value) => Get.to(() => SchoolPage(), transition: Transition.cupertino));               
+                            ).then((value) => Get.offAll(EventPage(), transition: Transition.cupertino));               
                           }
                         },
                         title: Font.out(

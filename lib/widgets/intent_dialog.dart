@@ -168,6 +168,25 @@ class _IntentDialogState extends State<IntentDialog> {
                                   icon: Icon(Icons.arrow_back_ios_rounded, size: 24)
                                 )
                               ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  onPressed: (){
+                                    Get.to(() => IntentControl(
+                                      eventUID: widget.targetEvent!.uid,
+                                      title: targetIntent.title,
+                                      description: targetIntent.description!,
+                                      answer: targetIntent.answer,
+                                      imageURL: targetIntent.imageURL,
+                                      multipleChoices: ["null"],
+                                      userWithRightAnswer: targetIntent.userWithRightAnswer.map((e) => e.toString()).toList(),
+                                      userWithWrongAnswer: targetIntent.userWithWrongAnswer.map((e) => e.toString()).toList(),
+                                      isActive: true,
+                                    ));
+                                  },
+                                  icon:  Icon(Icons.notification_important_rounded, color: Palette.black, size: 26),
+                                )
+                              ),
                               SizedBox(height: MQuery.height(0.02, context)),
                               Font.out(
                                 title: targetIntent.title,
@@ -272,6 +291,25 @@ class _IntentDialogState extends State<IntentDialog> {
                                   icon: Icon(Icons.arrow_back_ios_rounded, size: 24)
                                 )
                               ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  onPressed: (){
+                                    Get.to(() => IntentControl(
+                                      eventUID: widget.targetEvent!.uid,
+                                      title: targetIntent.title,
+                                      description: targetIntent.description!,
+                                      answer: targetIntent.answer,
+                                      imageURL: targetIntent.imageURL,
+                                      multipleChoices: [],
+                                      userWithRightAnswer: targetIntent.userWithRightAnswer.map((e) => e.toString()).toList(),
+                                      userWithWrongAnswer: targetIntent.userWithWrongAnswer.map((e) => e.toString()).toList(),
+                                      isActive: true,
+                                    ));
+                                  },
+                                  icon:  Icon(Icons.notification_important_rounded, color: Palette.black, size: 26),
+                                )
+                              ),
                               SizedBox(height: MQuery.height(0.02, context)),
                               Font.out(
                                 title: targetIntent.title,
@@ -350,6 +388,25 @@ class _IntentDialogState extends State<IntentDialog> {
                                       });
                                     },
                                     icon: Icon(Icons.arrow_back_ios_rounded, size: 24)
+                                  )
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: IconButton(
+                                    onPressed: (){
+                                      Get.to(() => IntentControl(
+                                        eventUID: widget.targetEvent!.uid,
+                                        title: targetIntent.title,
+                                        description: targetIntent.description!,
+                                        answer: targetIntent.answer,
+                                        imageURL: targetIntent.imageURL,
+                                        multipleChoices: targetIntent.multipleChoices.map((e) => e.toString()).toList(),
+                                        userWithRightAnswer: targetIntent.userWithRightAnswer.map((e) => e.toString()).toList(),
+                                        userWithWrongAnswer: targetIntent.userWithWrongAnswer.map((e) => e.toString()).toList(),
+                                        isActive: true,
+                                      ));
+                                    },
+                                    icon:  Icon(Icons.notification_important_rounded, color: Palette.black, size: 26),
                                   )
                                 ),
                                 SizedBox(height: MQuery.height(0.02, context)),

@@ -29,6 +29,16 @@ final mainUserStreamProvider = StreamProvider.family<MainUser, String>((ref, uid
   return database.mainUserProfile(uid);
 });
 
+final shopInfoProvider = StreamProvider.autoDispose<List>((ref){
+  final database = ref.watch(databaseProvider);
+  return database.shopBios;
+});
+
+final shopItemProvider = StreamProvider.autoDispose<List<ShopItemModel>>((ref){
+  final database = ref.watch(databaseProvider);
+  return database.itemList;
+});
+
 final onboardingViewModelProvider = StateNotifierProvider<OnboardingViewModel>((ref) {
   final sharedPreferencesService = ref.watch(sharedPreferencesServiceProvider);
   return OnboardingViewModel(sharedPreferencesService);
