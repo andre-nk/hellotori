@@ -34,6 +34,9 @@ class InitialPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(
+        primaryColor: Palette.blueAccent
+      ),
       initialRoute: '/',
       routes: {
         '/auth': (context) => AuthPage(),

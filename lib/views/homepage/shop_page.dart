@@ -46,10 +46,11 @@ class _ShopPageState extends State<ShopPage> {
                       return Stack(
                         children: <Widget>[
                           Positioned.fill(
-                            child: Image.network(
-                            info[1] ?? "",
-                            fit: BoxFit.cover,
-                          ))
+                            child: Image(
+                              image: NetworkImage(info[1] ?? ""),
+                              fit: BoxFit.cover,             
+                            )
+                          )
                         ],
                       );
                     },

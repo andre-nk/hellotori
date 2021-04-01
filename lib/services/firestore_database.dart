@@ -279,7 +279,8 @@ class FirestoreDatabase{
   List _shopInfoGenerator(DocumentSnapshot snapshot){
     return [
       snapshot.get("contact"),
-      snapshot.get("imageHeader")
+      snapshot.get("imageHeader"),
+      snapshot.get("generalMessage"),
     ];
   }
 

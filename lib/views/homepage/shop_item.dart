@@ -17,12 +17,14 @@ class _ShopItemState extends State<ShopItem> {
   Widget build(BuildContext context) {
 
     final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+    String number;
 
     return Consumer(
       builder: (context, watch, _){
 
         final authModel = watch(authModelProvider);
         final shopItem = watch(shopItemProvider);
+        final shopInfo = watch(shopInfoProvider);
         final mainUserProvider = watch(mainUserStreamProvider(authModel.auth.currentUser!.uid));
 
         return shopItem.when(
@@ -46,7 +48,41 @@ class _ShopItemState extends State<ShopItem> {
                         ), transition: Transition.cupertino);
                       },
                     )
-                  : SizedBox();
+                  : shopInfo.when(
+                      data: (value){
+                        return FloatingActionButton(
+                          elevation: 2,
+                          mini: false,
+                          backgroundColor: Palette.blueAccent,
+                          child: Icon(Icons.shopping_cart_rounded, size: 24),
+                          onPressed: () async {
+                            await launch("https://wa.me/${value[0]}?text=${value[2] + item[widget.index].title}");
+                          },
+                        );
+                      },
+                      loading: (){
+                        FloatingActionButton(
+                          elevation: 2,
+                          mini: false,
+                          backgroundColor: Palette.blueAccent,
+                          child: Icon(Icons.shopping_cart_rounded, size: 24),
+                          onPressed: () async {
+                            // await launch("https://wa.me/${value[0]}?text=Hello");
+                          },
+                        );
+                      },
+                      error: (_,__){
+                        FloatingActionButton(
+                          elevation: 2,
+                          mini: false,
+                          backgroundColor: Palette.blueAccent,
+                          child: Icon(Icons.shopping_cart_rounded, size: 24),
+                          onPressed: () async {
+                            // await launch("https://wa.me/${value[0]}?text=Hello");
+                          },
+                        );
+                      }
+                    );
                 },
                 loading: (){return SizedBox();},
                 error: (_,__){return SizedBox();}
