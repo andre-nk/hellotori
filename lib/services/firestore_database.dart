@@ -293,7 +293,8 @@ class FirestoreDatabase{
           title: element["title"],
           description: element["description"],
           imageURL: element["imageURL"],
-          price: element["price"]
+          price: element["price"],
+          isSold: element["isSold"]
         )
       );
     });
@@ -304,7 +305,7 @@ class FirestoreDatabase{
     required String title,
     required String description,
     required String imageURL,
-    required int price
+    required int price,
   }){
     return _service
       .collection("shop")
@@ -313,7 +314,8 @@ class FirestoreDatabase{
         "title": title,
         "description": description,
         "imageURL": imageURL,
-        "price": price
+        "price": price,
+        "isSold": false
       });
   }
 
@@ -322,7 +324,8 @@ class FirestoreDatabase{
     required String title,
     required String description,
     required String imageURL,
-    required int price
+    required int price,
+    required bool isSold
   }){
     return _service
       .collection("shop")
@@ -331,7 +334,8 @@ class FirestoreDatabase{
         "title": title,
         "description": description,
         "imageURL": imageURL,
-        "price": price
+        "price": price,
+        "isSold": isSold
       });
   }
 

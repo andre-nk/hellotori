@@ -17,7 +17,6 @@ class _ShopItemState extends State<ShopItem> {
   Widget build(BuildContext context) {
 
     final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
-    String number;
 
     return Consumer(
       builder: (context, watch, _){
@@ -50,14 +49,73 @@ class _ShopItemState extends State<ShopItem> {
                     )
                   : shopInfo.when(
                       data: (value){
-                        return FloatingActionButton(
-                          elevation: 2,
-                          mini: false,
-                          backgroundColor: Palette.blueAccent,
-                          child: Icon(Icons.shopping_cart_rounded, size: 24),
-                          onPressed: () async {
-                            await launch("https://wa.me/${value[0]}?text=${value[2] + item[widget.index].title}");
-                          },
+                        return Stack(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left:31),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                            color: Palette.blueAccent.withOpacity(0.2),
+                                            blurRadius: 40,
+                                            offset: Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: FloatingActionButton(
+                                        elevation: 0,
+                                        mini: false,
+                                        backgroundColor: Palette.white,
+                                        child: Icon(Icons.chat_bubble_outline, size: 24, color: Palette.blueAccent),
+                                        onPressed: () async {
+                                          await launch("https://wa.me/${value[0]}?text=${value[2] + item[widget.index].title}");
+                                        }
+                                      ),
+                                    ),
+                                  )    
+                                ),
+                                SizedBox(width: MQuery.width(0.02, context)),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    height: MQuery.height(0.075, context),
+                                    width: MQuery.width(0.275, context),
+                                    child: ElevatedButton(
+                                      child: Text(
+                                        "BELI SEKARANG!".toUpperCase(),
+                                        style: TextStyle(
+                                          fontFamily: "EinaSemiBold",
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 18,
+                                          color: Palette.white
+                                        )
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Palette.blueAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(50))
+                                        )
+                                      ),
+                                      onPressed: () async {
+                                        Get.to(() => TransactionControl(
+                                            productTitle: item[widget.index].title,
+                                            imageURL: item[widget.index].imageURL
+                                          ),
+                                          transition: Transition.cupertino
+                                        );
+                                      }
+                                    ),
+                                  )
+                                ),
+                              ],
+                            )                     
+                          ],
                         );
                       },
                       loading: (){
@@ -102,7 +160,7 @@ class _ShopItemState extends State<ShopItem> {
                     icon: Icon(Icons.share, color: Palette.black),
                     onPressed: (){
                       Share.share(
-                        ""
+                        "Hai Satria SMANSA! Yuk kepon merchandise official hasil karya satria SMANSA: ${item[widget.index].title}, hanya di aplikasi Hellotori!"
                       );
                     },
                   ) 
@@ -126,9 +184,20 @@ class _ShopItemState extends State<ShopItem> {
                           child: AspectRatio(
                             aspectRatio: 1,
                             child: Container(
+                              clipBehavior: Clip.hardEdge,
+                              foregroundDecoration: BoxDecoration(
+                                color: item[widget.index].isSold == true
+                                  ? Colors.grey 
+                                  : Colors.transparent,
+                                backgroundBlendMode: BlendMode.saturation
+                              ),
                               decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                                borderRadius: BorderRadius.all(Radius.circular(10))
+                              ),
+                              child: Image(
+                                image: NetworkImage(item[widget.index].imageURL),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),

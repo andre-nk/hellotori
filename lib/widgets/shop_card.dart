@@ -8,6 +8,7 @@ class ShopCard extends StatelessWidget {
   final int price;
   final int index;
   final bool isRightSide;
+  final bool isSold;
 
   ShopCard({
     required this.title,
@@ -15,7 +16,8 @@ class ShopCard extends StatelessWidget {
     required this.price,
     required this.index,
     required this.imageURL,
-    required this.isRightSide
+    required this.isRightSide,
+    required this.isSold
   });
 
   @override
@@ -47,9 +49,20 @@ class ShopCard extends StatelessWidget {
                 AspectRatio(
                   aspectRatio: 1,
                   child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    foregroundDecoration: BoxDecoration(
+                      color: isSold == true
+                        ? Colors.grey 
+                        : Colors.transparent,
+                      backgroundBlendMode: BlendMode.saturation
+                    ),
                     decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                    ),
+                    child: Image(
+                      image: NetworkImage(imageURL),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Container(

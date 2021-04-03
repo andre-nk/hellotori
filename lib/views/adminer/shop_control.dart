@@ -7,13 +7,15 @@ class ShopControl extends StatefulWidget {
   final String imageURL;
   final String uid;
   final int price;
+  final bool switchValue;
 
   const ShopControl({
     this.uid = "",
     this.title = "",
     this.description = "",
     this.imageURL = "",
-    this.price = 0
+    this.price = 0,
+    this.switchValue = false
   });
 
   @override
@@ -26,6 +28,7 @@ class _ShopControlState extends State<ShopControl> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   String _image = "";
+  bool switchValue = true;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,7 @@ class _ShopControlState extends State<ShopControl> {
       titleController.text = widget.title;
       descriptionController.text = widget.description;
       priceController.text = widget.price.toString();
+      switchValue = widget.switchValue;
     }
 
     return Consumer(
@@ -201,6 +205,26 @@ class _ShopControlState extends State<ShopControl> {
                       ),
                     ),
                     SizedBox(height: MQuery.height(0.05, context)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Font.out(
+                          title: "Terjual habis?",
+                          family: "EinaRegular",
+                          fontSize: 16,
+                        ),
+                        Switch(
+                          activeColor: Palette.blueAccent,
+                          value: switchValue,
+                          onChanged: (bool val){
+                            setState(() {
+                              switchValue = !switchValue;                      
+                            });
+                          }
+                        )
+                      ],
+                    ),
+                    SizedBox(height: MQuery.height(0.05, context)),
                     Container(
                       height: MQuery.height(0.08, context),
                       width: MQuery.width(0.8, context),
@@ -228,7 +252,8 @@ class _ShopControlState extends State<ShopControl> {
                                     description: descriptionController.text,
                                     price: int.parse(priceController.text),
                                     imageURL: value,
-                                    eventUID: widget.uid
+                                    eventUID: widget.uid,
+                                    isSold: switchValue
                                   );
                                 } else {
                                   print('create');
@@ -299,7 +324,8 @@ class _ShopControlState extends State<ShopControl> {
                                 description: descriptionController.text,
                                 price: int.parse(priceController.text),
                                 imageURL: _image,
-                                eventUID: widget.uid
+                                eventUID: widget.uid,
+                                isSold: switchValue
                               );                                                
                               Get.dialog(                            
                                 Dialog(

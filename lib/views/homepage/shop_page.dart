@@ -71,6 +71,7 @@ class _ShopPageState extends State<ShopPage> {
                           price: item[index].price,
                           imageURL: item[index].imageURL,
                           isRightSide: index.isOdd,
+                          isSold: item[index].isSold
                         ),
                       );
                     },
