@@ -44,6 +44,9 @@ final onboardingViewModelProvider = StateNotifierProvider<OnboardingViewModel>((
   return OnboardingViewModel(sharedPreferencesService);
 });
 
+final transactionProvider = Provider<TransactionController>((ref) => TransactionController());
+
+
 final authModelProvider = ChangeNotifierProvider<AuthenticationViewModel>(
   (ref) => AuthenticationViewModel(auth: ref.watch(firebaseAuthProvider)),
 );

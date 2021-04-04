@@ -280,7 +280,8 @@ class FirestoreDatabase{
     return [
       snapshot.get("contact"),
       snapshot.get("imageHeader"),
-      snapshot.get("generalMessage"),
+      snapshot.get("questionMessage"),
+      snapshot.get("purchaseMessage"),
     ];
   }
 

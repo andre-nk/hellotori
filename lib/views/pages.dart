@@ -10,7 +10,6 @@ import 'package:hellotori/configs/configs.dart';
 import 'package:hellotori/configs/hello_tori_icons.dart';
 import 'package:hellotori/model/model.dart';
 import 'package:hellotori/providers/providers.dart';
-import 'package:hellotori/services/services.dart';
 import 'package:hellotori/widgets/widgets.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_hex_color/flutter_hex_color.dart';

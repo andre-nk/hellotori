@@ -28,6 +28,9 @@ class _ShopItemState extends State<ShopItem> {
 
         return shopItem.when(
           data: (item){
+
+            print(shopInfo);
+
             return Scaffold(
               floatingActionButton: mainUserProvider.when(
                 data: (value){
