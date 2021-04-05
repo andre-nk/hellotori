@@ -112,7 +112,7 @@ class _EventPageContentState extends State<EventPageContent> {
                       mini: false,
                       backgroundColor: Palette.blueAccent,
                       child: Icon(Icons.add_rounded, size: 28),
-                      onPressed: (){
+                      onPressed: () async {
                         Get.to(() => EventControl(), transition: Transition.cupertino);
                       },
                     )
@@ -131,33 +131,78 @@ class _EventPageContentState extends State<EventPageContent> {
                         ),
                       )
                     : eventListProvider.data!.when(
-                        data: (event) => ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: event.length,
-                          itemBuilder: (context, index){
-                            return GestureDetector(
-                              onTap: (){
-                                Get.to(() => DetailedEventPage(
-                                    index: index,
-                                    event: event[index],
-                                  ), 
-                                transition: Transition.fadeIn);
-                              },
-                              child: Hero(
-                                tag: "hero" + index.toString(),
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MQuery.height(0.03, context)
-                                  ),
-                                  child: EventCard(
-                                    index: index,
-                                    event: event[index],
+                        data: (event){
+
+                          event.forEach((event) async {
+                            var dateString    = event.schedule;
+                            DateFormat format = new DateFormat("dd MMMM yy HH:mm");
+                            DateTime formattedDate = format.parse(dateString);
+
+                            if(formattedDate.isBefore(DateTime.now())){
+                              print("hiya");
+                            } else {
+
+                              print("scheduled");
+
+                              final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+                              var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+                                'alarm_notif',
+                                'alarm_notif',
+                                'Channel for Alarm notification',
+                                icon: 'splash',
+                                largeIcon: DrawableResourceAndroidBitmap('splash'),
+                              );
+
+                              var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+                                  presentAlert: true,
+                                  presentBadge: true,
+                                  presentSound: true);
+
+                              var platformChannelSpecifics = NotificationDetails(
+                                  android: androidPlatformChannelSpecifics,
+                                  iOS: iOSPlatformChannelSpecifics);
+
+                              // ignore: deprecated_member_use
+                              await flutterLocalNotificationsPlugin.schedule(
+                                0,
+                                "Acara ${event.title} udah mulai!", 
+                                "Ayo ikuti keseruannya hanya di App Hellotori",
+                                DateTime.now().add(Duration(seconds: 5)),
+                                platformChannelSpecifics,
+                                androidAllowWhileIdle: true
+                              );    
+                            }                 
+                          });
+
+                          return ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: event.length,
+                            itemBuilder: (context, index){
+                              return GestureDetector(
+                                onTap: (){
+                                  Get.to(() => DetailedEventPage(
+                                      index: index,
+                                      event: event[index],
+                                    ), 
+                                  transition: Transition.fadeIn);
+                                },
+                                child: Hero(
+                                  tag: "hero" + index.toString(),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: MQuery.height(0.03, context)
+                                    ),
+                                    child: EventCard(
+                                      index: index,
+                                      event: event[index],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        ),
+                              );
+                            }
+                          );
+                        },
                         error: (_,__) => Text("a"),
                         loading: (){
                           

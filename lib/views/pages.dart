@@ -21,6 +21,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 part "authentication/auth_widget.dart";
 part "authentication/auth_page.dart";
