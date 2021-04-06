@@ -51,7 +51,7 @@ class _ShopPageState extends State<ShopPage> {
                 body: FadeInUp(
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: MQuery.height(0.025, context),
+                      horizontal: MQuery.height(0.01, context),
                       vertical: MQuery.height(0.02, context)
                     ),
                     child: GridView.builder(

@@ -24,13 +24,17 @@ class ShopCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+    final key = new UniqueKey();
 
     return GestureDetector(
       onTap: (){
-        Get.to(() => ShopItem(index: index));
+        Get.to(() => ShopItem(
+          index: index,
+          unique: key.toString(),
+        ));
       },
       child: Hero(
-        tag: index,
+        tag: key,
         child: AspectRatio(
           aspectRatio: 1 / 1.6,
           child: Container(
@@ -67,7 +71,7 @@ class ShopCard extends StatelessWidget {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(
-                    horizontal: MQuery.height(0.01, context),
+                    horizontal: MQuery.height(0.0025, context),
                     vertical: MQuery.height(0.015, context),
                   ),
                   child: Column(

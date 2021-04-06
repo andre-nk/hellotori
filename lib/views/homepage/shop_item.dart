@@ -2,10 +2,12 @@ part of "../pages.dart";
 
 class ShopItem extends StatefulWidget {
 
-  final int index;
+  final index;
+  final String unique;
 
   ShopItem({
-    required this.index
+    required this.index,
+    required this.unique
   });
 
   @override

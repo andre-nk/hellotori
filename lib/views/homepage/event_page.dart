@@ -70,13 +70,34 @@ class _EventPageContentState extends State<EventPageContent> {
         final authModel = watch(authModelProvider);
         final dbProvider = watch(databaseProvider);
         final eventListProvider = watch(eventStreamProvider);
+        final userProvider = watch(mainUserStreamProvider(authModel.auth.currentUser!.uid));
 
-        if(mainUserStreamProvider(authModel.auth.currentUser!.uid).isBlank == true){
-          print("is the air that air breathe");
-          dbProvider.createUserData(authModel.auth.currentUser);
-        } else {
-          print("all i need");
-        }
+        FirebaseFirestore.instance
+          .collection('posts')
+          .doc(authModel.auth.currentUser!.uid)
+          .get().then((value){
+            if(value.exists){
+              print(value.exists.toString() + "a");
+            } else {
+              // print("is the air that air breathe");
+              if(userProvider.data == null){
+                dbProvider.createUserData(authModel.auth.currentUser); 
+              } else {
+                userProvider.whenData((value){
+                if(value.role != "Admin"){
+                  dbProvider.createUserData(authModel.auth.currentUser); 
+                  }
+                });
+              }
+            }
+          });
+
+        // if(mainUserStreamProvider(authModel.auth.currentUser!.uid).isBlank == true){
+        //   print("is the air that air breathe");
+        //   dbProvider.createUserData(authModel.auth.currentUser);
+        // } else {
+        //   print("all i need");
+        // }
 
         final mainUserProvider = watch(mainUserStreamProvider(authModel.auth.currentUser!.uid));
 
