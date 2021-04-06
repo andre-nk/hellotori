@@ -39,6 +39,12 @@ final shopItemProvider = StreamProvider.autoDispose<List<ShopItemModel>>((ref){
   return database.itemList;
 });
 
+final appBiosProvider = StreamProvider.autoDispose<List<AppBios>>((ref){
+  final database = ref.watch(databaseProvider);
+  return database.appBios;
+});
+
+
 final onboardingViewModelProvider = StateNotifierProvider<OnboardingViewModel>((ref) {
   final sharedPreferencesService = ref.watch(sharedPreferencesServiceProvider);
   return OnboardingViewModel(sharedPreferencesService);

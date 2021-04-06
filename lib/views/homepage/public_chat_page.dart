@@ -141,29 +141,35 @@ class _PublicChatPageState extends State<PublicChatPage> {
                           ),
                         ),                                   
                         Container(
-                          alignment: Alignment.bottomCenter,
+                          alignment: Alignment.topCenter,
                           padding: EdgeInsets.symmetric(
                             horizontal: MQuery.width(0.005, context)
                           ),
-                          height: MQuery.height(0.1, context),
+                          height: MQuery.height(0.2, context),
                           child: TextField(
-                            onSubmitted: (str){
-                              dbProvider.addChat(
-                                authProvider.auth.currentUser!.uid,
-                                controller.text,
-                                DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
-                                ""
-                              );
-                              controller.clear();
-                            },
-                            maxLines: 1,
+                            minLines: 1,
+                            maxLines: 3,
                             textCapitalization: TextCapitalization.sentences,
-                            textInputAction: TextInputAction.send,
+                            keyboardType: TextInputType.multiline,
                             controller: controller,
                             style: Font.style(
                               fontSize: 18
                             ),
                             decoration: new InputDecoration(
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.send_rounded, color: Palette.blueAccent),
+                                onPressed: (){
+                                  if(controller.text != ""){
+                                    dbProvider.addChat(
+                                      authProvider.auth.currentUser!.uid,
+                                      controller.text,
+                                      DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
+                                      ""
+                                    );
+                                  }
+                                  controller.clear();
+                                },
+                              ),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20,
                                 vertical: 20
@@ -171,12 +177,12 @@ class _PublicChatPageState extends State<PublicChatPage> {
                               focusedBorder: new OutlineInputBorder(
                                 borderSide: BorderSide(color: Palette.blueAccent, width: 1.5),
                                 borderRadius: const BorderRadius.all(
-                                  const Radius.circular(50.0),
+                                  const Radius.circular(10.0),
                                 ),
                               ),
                               border: new OutlineInputBorder(
                                 borderRadius: const BorderRadius.all(
-                                  const Radius.circular(50.0),
+                                  const Radius.circular(10.0),
                                 ),
                               ),
                               filled: true,

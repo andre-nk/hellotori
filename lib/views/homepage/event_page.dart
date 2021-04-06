@@ -64,19 +64,24 @@ class EventPageContent extends StatefulWidget {
 }
 class _EventPageContentState extends State<EventPageContent> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Consumer(
       builder: (context, watch, _){
         final authModel = watch(authModelProvider);
         final dbProvider = watch(databaseProvider);
         final eventListProvider = watch(eventStreamProvider);
+
+        if(mainUserStreamProvider(authModel.auth.currentUser!.uid).isBlank == true){
+          print("is the air that air breathe");
+          dbProvider.createUserData(authModel.auth.currentUser);
+        } else {
+          print("all i need");
+        }
+
         final mainUserProvider = watch(mainUserStreamProvider(authModel.auth.currentUser!.uid));
 
         return mainUserProvider.when(
           data: (value){
-            if(value.role != "Admin"){
-              dbProvider.createUserData(authModel.auth.currentUser);
-            }
             return HeaderPage(
               isDetailedPage: false,
               appBar: Row(
@@ -132,7 +137,6 @@ class _EventPageContentState extends State<EventPageContent> {
                       )
                     : eventListProvider.data!.when(
                         data: (event){
-
                           event.forEach((event) async {
                             var dateString    = event.schedule;
                             DateFormat format = new DateFormat("dd MMMM yy HH:mm");

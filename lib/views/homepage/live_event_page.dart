@@ -143,7 +143,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                                       SizedBox(height: MQuery.height(0.005, context),),
                                                       Font.out(
                                                         textAlign: TextAlign.start,
-                                                        title: schedule.toString().substring(0, schedule.length - 6) + ", pukul " + schedule.substring(schedule.length - 5, schedule.length),
+                                                        title: schedule.toString().substring(0, schedule.length - 5) + ", pukul " + schedule.substring(schedule.length - 5, schedule.length),
                                                         fontSize: 16,
                                                         color: Palette.black,
                                                         family: "EinaRegular"                                   
@@ -315,22 +315,29 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                 ),
                                 height: MQuery.height(0.1, context),
                                 child: TextField(
-                                  onSubmitted: (str){
-                                    dbProvider.addChat(
-                                      authProvider.auth.currentUser!.uid,
-                                      controller.text,
-                                      DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
-                                      event[widget.index!].uid);
-                                    controller.clear();
-                                  },
-                                  maxLines: 1,
+                                  minLines: 1,
+                                  maxLines: 3,
                                   textCapitalization: TextCapitalization.sentences,
-                                  textInputAction: TextInputAction.send,
+                                  keyboardType: TextInputType.multiline,
                                   controller: controller,
                                   style: Font.style(
                                     fontSize: 18
                                   ),
                                   decoration: new InputDecoration(
+                                    suffixIcon: IconButton(
+                                      icon: Icon(Icons.send_rounded, color: Palette.blueAccent),
+                                      onPressed: (){
+                                        if(controller.text != ""){
+                                          dbProvider.addChat(
+                                            authProvider.auth.currentUser!.uid,
+                                            controller.text,
+                                            DateFormat("dd MMMM yyyy HH:mm").format(DateTime.now()).toString(), 
+                                            event[widget.index!].uid);
+                                          controller.clear();
+                                        }
+                                        controller.clear();
+                                      },
+                                    ),
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20,
                                       vertical: 20
@@ -338,12 +345,12 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                     focusedBorder: new OutlineInputBorder(
                                       borderSide: BorderSide(color: Palette.blueAccent, width: 1.5),
                                       borderRadius: const BorderRadius.all(
-                                        const Radius.circular(50.0),
+                                        const Radius.circular(10.0),
                                       ),
                                     ),
                                     border: new OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
-                                        const Radius.circular(50.0),
+                                        const Radius.circular(10.0),
                                       ),
                                     ),
                                     filled: true,
@@ -352,7 +359,7 @@ class _LiveEventPageState extends State<LiveEventPage> with TickerProviderStateM
                                     fillColor: Colors.white70
                                   ),
                                 ),
-                              )
+                              )                   
                             )
                           : SizedBox()
                         ],

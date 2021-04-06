@@ -128,7 +128,8 @@ class BubbleMessage extends ConsumerWidget {
                             title: otherUser.name,
                             color: Palette.black,
                             fontSize: 14,
-                            family: "EinaSemiBold"
+                            family: "EinaSemiBold",
+                            textAlign: TextAlign.start
                           ),
                           SizedBox(height: MQuery.height(0.0025, context)),
                           Linkify(

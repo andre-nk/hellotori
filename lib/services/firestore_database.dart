@@ -275,6 +275,21 @@ class FirestoreDatabase{
       });
   }
 
+  List<AppBios> _appBiosGenerator(DocumentSnapshot snapshot){
+    List<AppBios> appBiosList = [];
+    for (var i = 0; i < snapshot.get("title").length; i++) {
+      appBiosList.add(
+        AppBios(
+          title: snapshot.get("title")[i],
+          tagline: snapshot.get("tagline")[i],
+          photoURL: snapshot.get("imageURL")[i]
+        )
+      );
+    }
+    return appBiosList;
+  }
+
+
   //SHOP
   List _shopInfoGenerator(DocumentSnapshot snapshot){
     return [
@@ -430,6 +445,14 @@ class FirestoreDatabase{
         role: event.get("role")
       )
     );
+  }
+
+  Stream<List<AppBios>> get appBios{
+    return _service
+      .collection("bios")
+      .doc("app-bios")
+      .snapshots()
+      .map(_appBiosGenerator);
   }
 }
 

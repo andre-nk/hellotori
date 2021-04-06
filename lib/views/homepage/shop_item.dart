@@ -55,7 +55,7 @@ class _ShopItemState extends State<ShopItem> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(left:31),
+                                  padding: EdgeInsets.only(left:0),
                                   child: Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Container(
@@ -81,28 +81,26 @@ class _ShopItemState extends State<ShopItem> {
                                   )    
                                 ),
                                 SizedBox(width: MQuery.width(0.02, context)),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Container(
-                                    height: MQuery.height(0.075, context),
-                                    width: MQuery.width(0.275, context),
-                                    child: ElevatedButton(
-                                      child: Text(
-                                        "BELI SEKARANG!".toUpperCase(),
-                                        style: TextStyle(
-                                          fontFamily: "EinaSemiBold",
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 18,
-                                          color: Palette.white
-                                        )
+                                Padding(
+                                  padding: EdgeInsets.only(left:10),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                            color: Palette.blueAccent.withOpacity(0.2),
+                                            blurRadius: 40,
+                                            offset: Offset(0, 4),
+                                          ),
+                                        ],
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Palette.blueAccent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(50))
-                                        )
-                                      ),
-                                      onPressed: () async {
+                                      child: FloatingActionButton(
+                                        elevation: 0,
+                                        mini: false,
+                                        backgroundColor: Palette.blueAccent,
+                                        child: Icon(Icons.shopping_cart_rounded, size: 24, color: Palette.white),
+                                        onPressed: () async {
                                         Get.to(() => TransactionControl(
                                             productTitle: item[widget.index].title,
                                             imageURL: item[widget.index].imageURL
@@ -110,8 +108,9 @@ class _ShopItemState extends State<ShopItem> {
                                           transition: Transition.cupertino
                                         );
                                       }
+                                      ),
                                     ),
-                                  )
+                                  )    
                                 ),
                               ],
                             )                     
