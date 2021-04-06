@@ -98,7 +98,6 @@ class _PublicChatPageState extends State<PublicChatPage> {
                             stream: chatListRaw,
                             builder: (context, snapshot) {
                               List<Chat> chats = snapshot.data!;
-                              print(chats);
                               return Container(
                                 width: MQuery.width(1, context),
                                 height: MQuery.height(0.65, context),

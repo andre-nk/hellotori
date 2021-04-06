@@ -53,9 +53,6 @@ class _IntentControlState extends State<IntentControl> {
 
   @override
   Widget build(BuildContext context) {
-    
-    print(widget.answer);
-
     multipleChoices = [
       TextEditingController(text: alphanumGenerator(0)),
       TextEditingController(text: alphanumGenerator(1)),
@@ -178,7 +175,6 @@ class _IntentControlState extends State<IntentControl> {
                                     setState(() {
                                       if (pickedFile != null) {
                                         _image = pickedFile.path;
-                                        print(_image);
                                         storeProvider.uploadFile(_image, _image);
                                       } else {
                                         print('No image selected.');

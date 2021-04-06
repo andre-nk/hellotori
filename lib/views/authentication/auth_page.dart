@@ -84,8 +84,9 @@ class AuthPage extends ConsumerWidget {
                         ),
                         child: OnboardingButton(
                           color: Colors.white,
-                          method: (){
-                            authModel.signUpWithGoogle();
+                          method: () async {
+                            await authModel.signUpWithGoogle();
+                            Get.offAllNamed("/eventpage");
                           },
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

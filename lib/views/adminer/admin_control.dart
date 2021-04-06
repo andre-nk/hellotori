@@ -379,7 +379,6 @@ class _EventControlState extends State<EventControl> {
                                     setState(() {
                                       if (pickedFile != null) {
                                         _image = pickedFile.path;
-                                        print(_image);
                                         storeProvider.uploadFile(_image, _image);
                                       } else {
                                         print('No image selected.');
@@ -451,7 +450,6 @@ class _EventControlState extends State<EventControl> {
                                 Get.snackbar("Judul belum diisi", "Silahkan isi judul sebelum membuat event!");
                               } else {
                                 if(widget.title != ""){
-                                  print('edit');
                                   dbProvider.editEvent(
                                     uid: widget.uid,
                                     title: titleController.text,
@@ -471,7 +469,6 @@ class _EventControlState extends State<EventControl> {
                                     currentLike: widget.currentLike
                                   );
                                 } else {
-                                  print('create');
                                   dbProvider.createEvent(
                                     title: titleController.text,
                                     description: descriptionController.text,
@@ -544,7 +541,6 @@ class _EventControlState extends State<EventControl> {
                             if(titleController.text == ""){
                               Get.snackbar("Judul belum diisi", "Silahkan isi judul sebelum membuat event!");
                             } else {
-                              print('edit');
                               dbProvider.editEvent(
                                 uid: widget.uid,
                                 title: titleController.text,

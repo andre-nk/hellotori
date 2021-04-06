@@ -154,7 +154,6 @@ class _ShopControlState extends State<ShopControl> {
                                     setState(() {
                                       if (pickedFile != null) {
                                         _image = pickedFile.path;
-                                        print(_image);
                                         storeProvider.uploadFile(_image, _image);
                                       } else {
                                         print('No image selected.');
@@ -246,7 +245,6 @@ class _ShopControlState extends State<ShopControl> {
                                 Get.snackbar("Judul belum diisi", "Silahkan isi judul sebelum membuat produk!");
                               } else {
                                 if(widget.title != ""){
-                                  print('edit');
                                   dbProvider.editShopItem(
                                     title: titleController.text,
                                     description: descriptionController.text,
@@ -256,7 +254,6 @@ class _ShopControlState extends State<ShopControl> {
                                     isSold: switchValue
                                   );
                                 } else {
-                                  print('create');
                                   dbProvider.addShopItem(
                                     title: titleController.text,
                                     description: descriptionController.text,

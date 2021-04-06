@@ -40,8 +40,6 @@ class ImagePreviewer extends StatelessWidget {
                     zoomedBackgroundColor: Colors.black.withOpacity(0.3),
                     resetDuration: const Duration(milliseconds: 100),
                     maxScale: 2.5,
-                    onZoomStart: (){print('Start zooming');},
-                    onZoomEnd: (){print('Stop zooming');},
                 ),
               ),
             )

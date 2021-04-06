@@ -1,10 +1,10 @@
 part of "../pages.dart";
 
 class AuthWidget extends ConsumerWidget {
-  final WidgetBuilder? nonSignedInBuilder;
-  final WidgetBuilder? signedInBuilder;
+  final WidgetBuilder nonSignedInBuilder;
+  final WidgetBuilder signedInBuilder;
 
-  AuthWidget({this.nonSignedInBuilder, this.signedInBuilder});
+  AuthWidget({required this.nonSignedInBuilder, required this.signedInBuilder});
   
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -12,8 +12,8 @@ class AuthWidget extends ConsumerWidget {
     return authStateChanges.when(
       data: (user){
         return user != null
-          ? signedInBuilder!(context)
-          : nonSignedInBuilder!(context);
+          ? signedInBuilder(context)
+          : nonSignedInBuilder(context);
       },
       loading: () => const Scaffold(
         body: Center(

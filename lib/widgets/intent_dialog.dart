@@ -54,7 +54,6 @@ class _IntentDialogState extends State<IntentDialog> {
         final dbProvider = watch(databaseProvider);
         final authProvider = watch(authModelProvider);
         var intentListRaw = dbProvider.intentList(widget.targetEvent!.uid);
-        print(intentListRaw.length);
 
         return StreamBuilder<List<ActivityIntent>>(
           stream: intentListRaw,

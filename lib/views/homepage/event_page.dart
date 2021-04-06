@@ -141,23 +141,21 @@ class _EventPageContentState extends State<EventPageContent> {
                             if(formattedDate.isBefore(DateTime.now())){
                               print("hiya");
                             } else {
-
-                              print("scheduled");
-
                               final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
                               var androidPlatformChannelSpecifics = AndroidNotificationDetails(
                                 'alarm_notif',
                                 'alarm_notif',
                                 'Channel for Alarm notification',
-                                icon: 'splash',
-                                largeIcon: DrawableResourceAndroidBitmap('splash'),
+                                icon: 'ic_stat_tori',
+                                largeIcon: DrawableResourceAndroidBitmap('ic_stat_tori'),
                               );
 
                               var iOSPlatformChannelSpecifics = IOSNotificationDetails(
                                   presentAlert: true,
                                   presentBadge: true,
-                                  presentSound: true);
+                                  presentSound: true
+                              );
 
                               var platformChannelSpecifics = NotificationDetails(
                                   android: androidPlatformChannelSpecifics,

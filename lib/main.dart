@@ -72,8 +72,7 @@ class InitialPage extends StatelessWidget {
       home: AuthWidget(
         nonSignedInBuilder: (_) => Consumer(
           builder: (context, watch, _) {
-            final didCompleteOnboarding =
-                watch(onboardingViewModelProvider.state);
+            final didCompleteOnboarding = watch(onboardingViewModelProvider.state);
             return didCompleteOnboarding ? AuthPage() : OnboardingPages();
           },
         ),
