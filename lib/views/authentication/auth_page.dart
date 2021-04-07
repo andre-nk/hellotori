@@ -42,7 +42,7 @@ class AuthPage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Font.out(
-                          title: "hellotori.",
+                          title: "hellosatria.",
                           fontSize: 48,
                           family: "EinaBold",
                           color: Palette.blueAccent),

@@ -161,7 +161,7 @@ class _ShopItemState extends State<ShopItem> {
                     icon: Icon(Icons.share, color: Palette.black),
                     onPressed: (){
                       Share.share(
-                        "Hai Satria SMANSA! Yuk kepon merchandise official hasil karya satria SMANSA: ${item[widget.index].title}, hanya di aplikasi Hellotori!"
+                        "Hai Satria SMANSA! Yuk kepon merchandise official hasil karya Satria SMANSA: ${item[widget.index].title}, hanya di aplikasi hellosatria!"
                       );
                     },
                   ) 
